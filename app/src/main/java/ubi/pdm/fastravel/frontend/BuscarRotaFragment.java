@@ -34,6 +34,10 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.maps.android.PolyUtil;
 
@@ -76,6 +80,9 @@ public class BuscarRotaFragment extends Fragment {
     private ActivityResultLauncher<Intent> autocompleteLauncher;
     private boolean isSelectingOrigin = false;
 
+    private BottomSheetBehavior<MaterialCardView> bottomSheetBehavior;
+
+
 
 
     @Nullable
@@ -91,6 +98,11 @@ public class BuscarRotaFragment extends Fragment {
             Places.initialize(requireContext().getApplicationContext(), apiKey);
         }
 
+        MaterialCardView bottomSheet = view.findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setHideable(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
         // Inicializa os componentes
         inputPontoA = view.findViewById(R.id.input_ponto_a);
         inputPontoB = view.findViewById(R.id.input_ponto_b);
@@ -101,27 +113,21 @@ public class BuscarRotaFragment extends Fragment {
         inputPontoB.setFocusable(false);
         inputPontoB.setOnClickListener(v -> openAutocomplete(REQ_AUTOCOMPLETE_DEST));
 
-        radioGroupTransporte = view.findViewById(R.id.radio_group_transporte);
         btnEncontrarRota = view.findViewById(R.id.btn_encontrar_rota);
 
+        View searchContainer = view.findViewById(R.id.container_search_bar);
+        searchContainer.setOnClickListener(v ->
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+        );
         // Placeholder para ação do botão (implementar lógica depois)
         btnEncontrarRota.setOnClickListener(v -> {
             String pontoA = inputPontoA.getText().toString();
             String pontoB = inputPontoB.getText().toString();
 
             // Verifica qual modo de transporte foi selecionado
-            int selectedId = radioGroupTransporte.getCheckedRadioButtonId();
             String transporte = "";
 
-            if (selectedId == R.id.radio_comboio) {
-                transporte = "Comboio";
-            } else if (selectedId == R.id.radio_uber) {
-                transporte = "Uber";
-            } else if (selectedId == R.id.radio_autocarro) {
-                transporte = "Autocarro";
-            } else if (selectedId == R.id.radio_misto) {
-                transporte = "Misto";
-            }
+
 
             // Toast temporário para feedback
             Toast.makeText(getContext(),
@@ -129,6 +135,15 @@ public class BuscarRotaFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
 
             requestRoute(pontoA, pontoB);
+        });
+
+        MaterialButton btnInverter = view.findViewById(R.id.btn_inverter);
+        btnInverter.setOnClickListener(v -> {
+            TextInputEditText inputA = view.findViewById(R.id.input_ponto_a);
+            TextInputEditText inputB = view.findViewById(R.id.input_ponto_b);
+            CharSequence temp = inputA.getText();
+            inputA.setText(inputB.getText());
+            inputB.setText(temp);
         });
 
         return view;
