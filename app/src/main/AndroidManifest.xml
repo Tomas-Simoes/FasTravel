@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".frontend.FastTravelApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".frontend.MainActivity" />
+        <activity android:name=".frontend.ui.activities.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
