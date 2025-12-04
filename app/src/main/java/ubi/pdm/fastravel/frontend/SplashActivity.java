@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
-    public class SplashActivity extends AppCompatActivity {
+import ubi.pdm.fastravel.frontend.ui.activities.MainActivity;
+
+public class SplashActivity extends AppCompatActivity {
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
