@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".frontend.FastTravelApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,14 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FasTravel">
         <activity
-            android:name=".frontend.ui.activities.MainActivity"
-            android:exported="true">
+            android:name=".frontend.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FasTravel.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".frontend.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
