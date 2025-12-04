@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -33,17 +34,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AddressComponent;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.PlaceAutocomplete;
+import com.google.android.libraries.places.widget.PlaceAutocompleteActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.maps.android.PolyUtil;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +63,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
@@ -90,6 +96,8 @@ public class BuscarRotaFragment extends Fragment {
     private RouteAdapter routeAdapter;
     private final List<RouteInfo> currentRoutes = new ArrayList<>();
 
+    private PlacesClient placesClient;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -107,7 +115,7 @@ public class BuscarRotaFragment extends Fragment {
         inputPontoA = view.findViewById(R.id.input_ponto_a);
         inputPontoB = view.findViewById(R.id.input_ponto_b);
 
-        // CHANGED: til_ponto_a e til_ponto_b agora são LinearLayout (não TextInputLayout)
+        // til_ponto_a e til_ponto_b agora são LinearLayout
         LinearLayout tilPontoA = view.findViewById(R.id.til_ponto_a);
         LinearLayout tilPontoB = view.findViewById(R.id.til_ponto_b);
 
@@ -123,7 +131,6 @@ public class BuscarRotaFragment extends Fragment {
             openAutocomplete(REQ_AUTOCOMPLETE_DEST);
         });
 
-        // Se ganhar foco por qualquer razão, expande também
         inputPontoA.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
@@ -131,7 +138,6 @@ public class BuscarRotaFragment extends Fragment {
             if (hasFocus) bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
-        // Tocar no layout também expande
         View.OnClickListener expandListener = v ->
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         tilPontoA.setOnClickListener(expandListener);
@@ -219,23 +225,74 @@ public class BuscarRotaFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Client do Places (usa o initialize que fizeste na Application)
+        placesClient = Places.createClient(requireContext());
+
+        // Activity Result para o PlaceAutocompleteActivity (novo widget)
         autocompleteLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    if (result.getResultCode() == Activity.RESULT_OK && data != null) {
 
-                        Place place = Autocomplete.getPlaceFromIntent(result.getData());
+                        AutocompletePrediction prediction =
+                                PlaceAutocomplete.getPredictionFromIntent(data);
 
-                        if (isSelectingOrigin) {
-                            originLatLng = place.getLocation();
-                            inputPontoA.setText(place.getShortFormattedAddress() != null ? place.getShortFormattedAddress() : place.getPrimaryTypeDisplayName());
-                        } else {
-                            destLatLng = place.getLocation();
-                            inputPontoB.setText(place.getShortFormattedAddress() != null ? place.getShortFormattedAddress(): place.getPrimaryTypeDisplayName());
+                        if (prediction == null) {
+                            Toast.makeText(requireContext(),
+                                    "Não foi possível obter o local selecionado",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
                         }
 
-                    } else if (result.getResultCode() == AutocompleteActivity.RESULT_ERROR) {
-                        Status status = Autocomplete.getStatusFromIntent(result.getData());
+                        String placeId = prediction.getPlaceId();
+                        AutocompleteSessionToken token =
+                                PlaceAutocomplete.getSessionTokenFromIntent(data);
+
+                        List<Place.Field> placeFields = Arrays.asList(
+                                Place.Field.ID,
+                                Place.Field.LOCATION,
+                                Place.Field.DISPLAY_NAME,
+                                Place.Field.FORMATTED_ADDRESS,
+                                Place.Field.SHORT_FORMATTED_ADDRESS
+                        );
+
+                        FetchPlaceRequest request =
+                                FetchPlaceRequest.builder(placeId, placeFields)
+                                        .setSessionToken(token)
+                                        .build();
+
+                        Task<FetchPlaceResponse> task = placesClient.fetchPlace(request);
+                        task.addOnSuccessListener(response -> {
+                            Place place = response.getPlace();
+                            LatLng latLng = place.getLocation();
+
+                            String displayText = place.getShortFormattedAddress();
+                            if (displayText == null || displayText.isEmpty()) {
+                                displayText = place.getFormattedAddress();
+                            }
+                            if (displayText == null || displayText.isEmpty()) {
+                                displayText = place.getDisplayName();
+                            }
+                            if (displayText == null) displayText = "";
+
+                            if (isSelectingOrigin) {
+                                originLatLng = latLng;
+                                inputPontoA.setText(displayText);
+                            } else {
+                                destLatLng = latLng;
+                                inputPontoB.setText(displayText);
+                            }
+                        }).addOnFailureListener(e -> {
+                            String msg = "Erro ao obter detalhes do local";
+                            if (e instanceof ApiException) {
+                                msg += ": " + ((ApiException) e).getStatusCode();
+                            }
+                            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+                        });
+
+                    } else if (result.getResultCode() == PlaceAutocompleteActivity.RESULT_ERROR && data != null) {
+                        Status status = PlaceAutocomplete.getResultStatusFromIntent(data);
                         Toast.makeText(requireContext(),
                                 "Erro no autocomplete: " + status.getStatusMessage(),
                                 Toast.LENGTH_SHORT).show();
@@ -321,7 +378,6 @@ public class BuscarRotaFragment extends Fragment {
 
             info.summary = routeObj.optString("summary", "Rota " + (i + 1));
 
-            // polyline para desenhar no mapa
             JSONObject overviewPolyline = routeObj.getJSONObject("overview_polyline");
             String points = overviewPolyline.getString("points");
             info.routePoints.addAll(PolyUtil.decode(points));
@@ -340,7 +396,6 @@ public class BuscarRotaFragment extends Fragment {
                     info.departureTimeText = leg.getJSONObject("departure_time").optString("text", "");
                 }
 
-                // Itinerário (steps)
                 JSONArray steps = leg.getJSONArray("steps");
                 for (int s = 0; s < steps.length(); s++) {
                     JSONObject step = steps.getJSONObject(s);
@@ -355,7 +410,6 @@ public class BuscarRotaFragment extends Fragment {
                             lineName = line.optString("short_name",
                                     line.optString("name", "Linha"));
 
-                            // tipo de veículo (BUS, RAIL, SUBWAY, etc.)
                             JSONObject vehicle = line.optJSONObject("vehicle");
                             if (vehicle != null) {
                                 String type = vehicle.optString("type", null);
@@ -382,7 +436,6 @@ public class BuscarRotaFragment extends Fragment {
                         info.itineraryLines.add(sb.toString());
 
                     } else {
-                        // Para passos a pé / carro: usar instrução simples
                         String htmlInstr = step.optString("html_instructions", "");
                         if (!htmlInstr.isEmpty()) {
                             String plain = htmlInstr.replaceAll("<[^>]*>", "");
@@ -401,7 +454,6 @@ public class BuscarRotaFragment extends Fragment {
     private String buildDirectionsUrl(String origin, String destination, String mode, @Nullable String transitMode)
             throws UnsupportedEncodingException {
 
-        // Usa texto (endereço); podes trocar para lat,lng com originLatLng/destLatLng se quiseres
         String strOrigin = "origin=" + URLEncoder.encode(origin, "UTF-8");
         String strDest = "destination=" + URLEncoder.encode(destination, "UTF-8");
 
@@ -449,21 +501,12 @@ public class BuscarRotaFragment extends Fragment {
     private void openAutocomplete(int requestCode) {
         isSelectingOrigin = (requestCode == REQ_AUTOCOMPLETE_ORIGIN);
 
-        List<Place.Field> fields = Arrays.asList(
-                Place.Field.ID,
-                Place.Field.DISPLAY_NAME,
-                Place.Field.FORMATTED_ADDRESS,
-                Place.Field.SHORT_FORMATTED_ADDRESS,
-                Place.Field.LOCATION
-        );
+        PlaceAutocomplete.IntentBuilder builder = new PlaceAutocomplete.IntentBuilder();
+        builder.setCountries(Collections.singletonList("PT"));
 
-        Intent intent = new Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.OVERLAY, fields
-        ).build(requireContext());
-
+        Intent intent = builder.build(requireContext());
         autocompleteLauncher.launch(intent);
     }
-
 
     @SuppressWarnings("deprecation")
     private void enableMyLocationAndCenter() {
@@ -507,7 +550,7 @@ public class BuscarRotaFragment extends Fragment {
         List<LatLng> routePoints = new ArrayList<>();
 
         boolean hasTransit = false;
-        String primaryVehicleType = null; // BUS, RAIL, SUBWAY, etc.
+        String primaryVehicleType = null;
     }
 
     private static class RouteViewHolder extends RecyclerView.ViewHolder {
@@ -527,7 +570,8 @@ public class BuscarRotaFragment extends Fragment {
         }
     }
 
-    private static class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
+    // 🔹 AGORA NÃO É STATIC → consegue chamar drawRoute e usar bottomSheetBehavior
+    private class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
 
         private final List<RouteInfo> routes;
 
@@ -547,7 +591,6 @@ public class BuscarRotaFragment extends Fragment {
         public void onBindViewHolder(@NonNull RouteViewHolder holder, int position) {
             RouteInfo r = routes.get(position);
 
-            // Título: resumo + duração
             StringBuilder titulo = new StringBuilder();
             if (r.summary != null && !r.summary.isEmpty()) {
                 titulo.append(r.summary);
@@ -559,7 +602,6 @@ public class BuscarRotaFragment extends Fragment {
             }
             holder.tvTitulo.setText(titulo.toString());
 
-            // Tempo: partida / chegada
             StringBuilder tempo = new StringBuilder();
             if (r.departureTimeText != null && !r.departureTimeText.isEmpty()) {
                 tempo.append("Partida ").append(r.departureTimeText);
@@ -570,7 +612,6 @@ public class BuscarRotaFragment extends Fragment {
             }
             holder.tvTempo.setText(tempo.toString());
 
-            // Itinerário (primeiras 3 linhas)
             if (!r.itineraryLines.isEmpty()) {
                 StringBuilder sub = new StringBuilder();
                 for (int i = 0; i < r.itineraryLines.size() && i < 3; i++) {
@@ -582,7 +623,6 @@ public class BuscarRotaFragment extends Fragment {
                 holder.tvItinerario.setText("Itinerário detalhado indisponível.");
             }
 
-            // Ícone de modo estilo Moovit
             int iconRes;
 
             if (r.hasTransit) {
@@ -592,20 +632,31 @@ public class BuscarRotaFragment extends Fragment {
                 } else if (type.contains("RAIL") || type.contains("TRAIN")) {
                     iconRes = R.drawable.ic_train;
                 } else if (type.contains("SUBWAY") || type.contains("METRO")) {
-                    iconRes = R.drawable.ic_bus; // CHANGED: use ic_bus como fallback se não tiver ic_metro
+                    iconRes = R.drawable.ic_bus;
                 } else if (type.contains("TRAM")) {
-                    iconRes = R.drawable.ic_bus; // CHANGED: use ic_bus como fallback se não tiver ic_tram
+                    iconRes = R.drawable.ic_bus;
                 } else {
-                    iconRes = R.drawable.ic_navigation; // CHANGED: ic_walk não existe, usa ic_navigation
+                    iconRes = R.drawable.ic_navigation;
                 }
             } else {
-                iconRes = R.drawable.ic_car; // Uber e carro
+                iconRes = R.drawable.ic_car;
             }
 
             holder.ivMode.setImageResource(iconRes);
 
-            // FUTURO: onClick para desenhar rota escolhida
-            // holder.card.setOnClickListener(v -> { ... });
+            holder.card.setOnClickListener(v -> {
+                int count = (r.routePoints != null) ? r.routePoints.size() : 0;
+
+                if (count == 0) {
+                    return;
+                }
+
+                drawRoute(r.routePoints);
+
+                if (bottomSheetBehavior != null) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            });
         }
 
         @Override
