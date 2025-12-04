@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="chip_background_checked">#E0F2FE</color>
+    <color name="chip_background_unchecked">#F8FAFC</color>
+
+    <!-- Primary Colors -->
+    <color name="primary_blue">#3B82F6</color>
+    <color name="primary_emerald">#10B981</color>
+    <color name="primary_purple">#8B5CF6</color>
+
+    <!-- Background Colors -->
+    <color name="background_white">#FFFFFF</color>
+    <color name="background_light">#F8FAFC</color>
+    <color name="background_gray">#F1F5F9</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+    <color name="text_tertiary">#64748B</color>
+    <color name="text_hint">#94A3B8</color>
+
 </resources>

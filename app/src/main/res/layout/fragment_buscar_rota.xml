@@ -3,75 +3,133 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <!-- Mapa full screen -->
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <!-- Mapa full screen com gradiente overlay -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <!-- BOTTOM SHEET -->
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Overlay gradiente sutil -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/gradient_top_overlay" />
+
+    </FrameLayout>
+
+    <!-- Floating Search Bar com glassmorphism -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_bar_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="100dp"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="12dp"
+        app:cardBackgroundColor="#F5FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_primary"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@android:color/white" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Where to?"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#0F172A"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search destinations &amp; routes"
+                    android:textSize="12sp"
+                    android:textColor="#64748B" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="#94A3B8" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Bottom Sheet moderno -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="16dp"
+        app:cardBackgroundColor="@android:color/white"
         app:layout_behavior="@string/bottom_sheet_behavior"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="80dp">
+        app:behavior_peekHeight="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Handle para arrastar -->
+            <!-- Handle moderno -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
+                android:layout_height="32dp"
                 android:gravity="center"
-                android:paddingTop="8dp">
+                android:paddingTop="12dp">
 
                 <View
-                    android:layout_width="40dp"
+                    android:layout_width="48dp"
                     android:layout_height="4dp"
-                    android:background="@android:color/darker_gray"
-                    android:alpha="0.5" />
+                    android:background="@drawable/handle_shape"
+                    android:alpha="0.3" />
             </LinearLayout>
 
-            <!-- “Barra de pesquisa” que fica sempre visível quando colapsado -->
-            <LinearLayout
-                android:id="@+id/container_search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp"
-                android:gravity="center_vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Pesquisar rota"
-                    app:startIconDrawable="@android:drawable/ic_menu_search">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_search"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:cursorVisible="false"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <!-- O resto só aparece quando o bottom sheet é expandido -->
+            <!-- Conteúdo do bottom sheet -->
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,133 +139,255 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="24dp">
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="32dp">
 
-                    <!-- Inputs A/B -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_ponto_a"
+                    <!-- Input Container com design moderno -->
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Ponto de Partida (A)"
-                        android:layout_marginBottom="12dp"
-                        app:startIconDrawable="@android:drawable/ic_menu_mylocation">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_ponto_a"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_ponto_b"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Destino (B)"
                         android:layout_marginBottom="16dp"
-                        app:startIconDrawable="@android:drawable/ic_dialog_map">
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="2dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        app:cardBackgroundColor="@android:color/white">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_ponto_b"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:orientation="vertical">
 
-                    <!-- Botão inverter -->
+                            <!-- Ponto A -->
+                            <LinearLayout
+                                android:id="@+id/til_ponto_a"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="16dp"
+                                android:gravity="center_vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="44dp"
+                                    android:layout_height="44dp"
+                                    app:cardCornerRadius="22dp"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="#3B82F6">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_circle"
+                                        app:tint="@android:color/white" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/input_ponto_a"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="16dp"
+                                    android:hint="Starting point"
+                                    android:textSize="15sp"
+                                    android:textColor="#0F172A"
+                                    android:textColorHint="#94A3B8"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:background="@android:color/transparent"
+                                    android:inputType="text" />
+                            </LinearLayout>
+
+                            <!-- Divider -->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="76dp"
+                                android:background="#F1F5F9" />
+
+                            <!-- Ponto B -->
+                            <LinearLayout
+                                android:id="@+id/til_ponto_b"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="16dp"
+                                android:gravity="center_vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="44dp"
+                                    android:layout_height="44dp"
+                                    app:cardCornerRadius="22dp"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="#10B981">
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_location"
+                                        app:tint="@android:color/white" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/input_ponto_b"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="16dp"
+                                    android:hint="Where to?"
+                                    android:textSize="15sp"
+                                    android:textColor="#0F172A"
+                                    android:textColorHint="#94A3B8"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:background="@android:color/transparent"
+                                    android:inputType="text" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Botão inverter redesigned -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_inverter"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="44dp"
                         android:layout_gravity="end"
-                        android:layout_marginBottom="16dp"
-                        android:text="Inverter A/B"
-                        app:icon="@android:drawable/ic_menu_rotate"
+                        android:layout_marginBottom="20dp"
+                        android:text="Swap"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        app:icon="@drawable/ic_swap"
                         app:iconGravity="start"
-                        app:iconPadding="8dp" />
+                        app:iconPadding="8dp"
+                        app:strokeColor="#CBD5E1"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="22dp"
+                        android:textColor="#475569" />
 
-                    <!-- Modos transporte -->
-                    <com.google.android.material.textview.MaterialTextView
+                    <!-- Modos transporte redesigned -->
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Modo de Transporte"
-                        android:textSize="14sp"
+                        android:text="Transport Mode"
+                        android:textSize="15sp"
                         android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textColor="#0F172A"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="12dp" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chip_group_transporte"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="20dp"
                         app:singleSelection="true"
-                        app:selectionRequired="true">
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_comboio"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:text="Comboio"
+                            style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Train"
+                            android:textColor="@color/chip_text_color"
                             android:checked="true"
-                            app:checkedIconVisible="true" />
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="24dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_train"
+                            app:checkedIconVisible="false" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_autocarro"
+                            style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:text="Autocarro" />
+                            android:layout_height="48dp"
+                            android:text="Bus"
+                            android:textColor="@color/chip_text_color"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="24dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_bus"
+                            app:checkedIconVisible="false" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_uber"
+                            style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:text="Uber" />
+                            android:layout_height="48dp"
+                            android:text="Rideshare"
+                            android:textColor="@color/chip_text_color"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="24dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_car"
+                            app:checkedIconVisible="false" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_misto"
+                            style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:text="Misto" />
+                            android:layout_height="48dp"
+                            android:text="Mixed"
+                            android:textColor="@color/chip_text_color"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="24dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_route"
+                            app:checkedIconVisible="false" />
                     </com.google.android.material.chip.ChipGroup>
 
-                    <!-- Botão encontrar rota -->
+                    <!-- Botão principal com gradiente -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_encontrar_rota"
-                        style="@style/Widget.MaterialComponents.Button"
+                        style="@style/Widget.Material3.Button"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Encontrar Rota"
+                        android:layout_height="56dp"
+                        android:text="Find Routes"
                         android:textAllCaps="false"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:layout_marginBottom="16dp" />
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@drawable/button_gradient_primary"
+                        app:cornerRadius="28dp"
+                        android:layout_marginBottom="24dp"
+                        android:elevation="4dp" />
 
                     <!-- Resultados -->
-                    <com.google.android.material.textview.MaterialTextView
+                    <TextView
                         android:id="@+id/tv_resultados_titulo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sugestões de Percurso"
-                        android:textSize="14sp"
+                        android:text="Route Suggestions"
+                        android:textSize="18sp"
                         android:textStyle="bold"
+                        android:textColor="#0F172A"
+                        android:fontFamily="sans-serif-medium"
                         android:visibility="gone"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginBottom="12dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_rotas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        android:clipToPadding="false" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

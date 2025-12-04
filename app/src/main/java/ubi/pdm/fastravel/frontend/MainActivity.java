@@ -14,14 +14,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Configura a BottomNavigationView
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnItemSelectedListener(navListener);
-
-        // Carrega o fragment inicial (Buscar Rota)
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new BuscarRotaFragment())
+                    .replace(android.R.id.content, new BuscarRotaFragment())
                     .commit();
         }
     }
