@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend;
+package ubi.pdm.fastravel.frontend.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.util.HistoricoAdapter;
+import ubi.pdm.fastravel.frontend.routes.Route;
 
 public class HistoricoFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private HistoricoAdapter adapter;
-    private List<ViagemHistorico> listaViagens;
+    private List<Route> listaViagens;
 
     @Nullable
     @Override
@@ -33,9 +35,9 @@ public class HistoricoFragment extends Fragment {
         listaViagens = new ArrayList<>();
 
         // Dados de exemplo (remover quando implementar banco de dados)
-        listaViagens.add(new ViagemHistorico("Lisboa", "Porto", "Comboio", "01/12/2025"));
-        listaViagens.add(new ViagemHistorico("Coimbra", "Aveiro", "Autocarro", "28/11/2025"));
-        listaViagens.add(new ViagemHistorico("Braga", "Faro", "Misto", "25/11/2025"));
+        listaViagens.add(new Route("Lisboa", "Porto", "Comboio", "01/12/2025"));
+        listaViagens.add(new Route("Coimbra", "Aveiro", "Autocarro", "28/11/2025"));
+        listaViagens.add(new Route("Braga", "Faro", "Misto", "25/11/2025"));
 
         adapter = new HistoricoAdapter(listaViagens);
         recyclerView.setAdapter(adapter);

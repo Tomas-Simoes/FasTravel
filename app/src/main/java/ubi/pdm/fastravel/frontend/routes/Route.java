@@ -1,12 +1,12 @@
-package ubi.pdm.fastravel.frontend;
+package ubi.pdm.fastravel.frontend.routes;
 
-public class ViagemHistorico {
+public class Route {
     private String origem;
     private String destino;
     private String transporte;
     private String data;
 
-    public ViagemHistorico(String origem, String destino, String transporte, String data) {
+    public Route(String origem, String destino, String transporte, String data) {
         this.origem = origem;
         this.destino = destino;
         this.transporte = transporte;

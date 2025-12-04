@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FasTravel">
         <activity
-            android:name=".frontend.MainActivity"
+            android:name=".frontend.ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

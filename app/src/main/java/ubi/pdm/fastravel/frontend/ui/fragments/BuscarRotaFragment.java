@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend;
+package ubi.pdm.fastravel.frontend.ui.fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -37,7 +37,6 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.maps.android.PolyUtil;
 

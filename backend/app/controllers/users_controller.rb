@@ -22,8 +22,8 @@ class UsersController < ApplicationController
         render json: {message: 'Unauthorized'}, status: :forbidden
     end
 
-    rescue ActiveRecord::RecordNotFound
-      render json: {message: "User not found"}, status: :not_found
+  rescue ActiveRecord::RecordNotFound
+    render json: {message: "User not found"}, status: :not_found
   end
 
   private

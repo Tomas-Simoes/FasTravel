@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend;
+package ubi.pdm.fastravel.frontend.util;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.routes.Route;
 
 public class HistoricoAdapter extends RecyclerView.Adapter<HistoricoAdapter.HistoricoViewHolder> {
 
-    private List<ViagemHistorico> listaViagens;
+    private List<Route> listaViagens;
 
-    public HistoricoAdapter(List<ViagemHistorico> listaViagens) {
+    public HistoricoAdapter(List<Route> listaViagens) {
         this.listaViagens = listaViagens;
     }
 
@@ -28,7 +29,7 @@ public class HistoricoAdapter extends RecyclerView.Adapter<HistoricoAdapter.Hist
 
     @Override
     public void onBindViewHolder(@NonNull HistoricoViewHolder holder, int position) {
-        ViagemHistorico viagem = listaViagens.get(position);
+        Route viagem = listaViagens.get(position);
         holder.textOrigem.setText("De: " + viagem.getOrigem());
         holder.textDestino.setText("Para: " + viagem.getDestino());
         holder.textTransporte.setText("Transporte: " + viagem.getTransporte());

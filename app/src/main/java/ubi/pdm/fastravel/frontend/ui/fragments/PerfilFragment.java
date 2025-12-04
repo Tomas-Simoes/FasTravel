@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend;
+package ubi.pdm.fastravel.frontend.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
