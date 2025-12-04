@@ -43,8 +43,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // google maps api
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation("com.google.android.libraries.places:places:4.1.0")
-    implementation("com.google.maps.android:android-maps-utils:2.3.0")
-    implementation("com.google.android.libraries.places:places:3.5.0")
+    implementation("com.google.android.gms:play-services-maps:19.2.0")
+    implementation("com.google.android.libraries.places:places:5.1.1")
+    implementation("com.google.maps.android:android-maps-utils:3.19.1")
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="300dp"
+    android:layout_margin="12dp"
+    android:background="@drawable/card_back_bg">
+
+    <LinearLayout
+        android:id="@+id/backCard"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/titleBack"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1E293B"/>
+
+        <TextView
+            android:id="@+id/detailsBack"
+            android:textSize="14sp"
+            android:textColor="#64748B"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnSelectRoute"
+            android:text="Escolher Rota"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+
+</FrameLayout>
