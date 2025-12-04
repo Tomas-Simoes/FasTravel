@@ -9,7 +9,10 @@
         android:id="@+id/routesRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:clipToPadding="false"
+        android:paddingTop="100dp"
         tools:listitem="@layout/item_route_card_front"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

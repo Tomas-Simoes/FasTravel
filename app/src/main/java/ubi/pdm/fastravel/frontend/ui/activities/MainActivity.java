@@ -9,6 +9,7 @@ import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.ui.fragments.BuscarRotaFragment;
 import ubi.pdm.fastravel.frontend.ui.fragments.HistoricoFragment;
 import ubi.pdm.fastravel.frontend.ui.fragments.PerfilFragment;
+import ubi.pdm.fastravel.frontend.ui.themedroute.ThemedRoutesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new BuscarRotaFragment())
+                    .replace(android.R.id.content, new ThemedRoutesFragment())
                     .commit();
         }
     }
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new HistoricoFragment();
                 } else if (itemId == R.id.nav_perfil) {
                     selectedFragment = new PerfilFragment();
+                } else if (itemId == R.id.search_bar_card) {
+                    selectedFragment = new ThemedRoutesFragment();
                 }
 
                 if (selectedFragment != null) {

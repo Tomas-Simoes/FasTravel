@@ -1,15 +1,14 @@
 package ubi.pdm.fastravel.frontend.ui.themedroute;
 
-import androidx.recyclerview.widget.RecyclerView;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
-
 import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
 
@@ -46,30 +45,37 @@ public class ThemedRoutesController extends RecyclerView.Adapter<ThemedRoutesCon
     }
 
     class RouteViewHolder extends RecyclerView.ViewHolder {
-        View front, back;
-        TextView titleFront, descriptionFront;
-
-        boolean flipped = false;
+        ImageView routeImage;
+        LinearLayout coloredSection;
+        TextView titleFront, descriptionFront, durationFront;
 
         RouteViewHolder(View itemView) {
             super(itemView);
-
-            front = itemView.findViewById(R.id.frontCard);
+            routeImage = itemView.findViewById(R.id.routeImage);
+            coloredSection = itemView.findViewById(R.id.coloredSection);
             titleFront = itemView.findViewById(R.id.titleFront);
+            descriptionFront = itemView.findViewById(R.id.descriptionFront);
+            durationFront = itemView.findViewById(R.id.durationFront);
 
-            itemView.setOnClickListener(v -> flipCard());
+            itemView.setOnClickListener(v -> {
+                // Aqui vais implementar o flip para mostrar o verso
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    // TODO: Implementar flip animation
+                }
+            });
         }
 
-        void bind(ThemedRoute r) {
-            titleFront.setText(r.getTitle());
-            descriptionFront.setText(r.getDescription());
-        }
+        void bind(ThemedRoute route) {
+            titleFront.setText(route.getTitle());
+            descriptionFront.setText(route.getDescription());
+            durationFront.setText(route.getDuration());
 
-        void flipCard() {
-            Animation out = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.card_flip_out);
-            Animation in = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.card_flip_in);
+            coloredSection.setBackgroundColor(Color.parseColor(route.getColor()));
 
-            front.startAnimation(out);
+            if (route.getImageResId() != 0) {
+                routeImage.setImageResource(route.getImageResId());
+            }
         }
     }
 }
