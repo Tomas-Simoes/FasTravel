@@ -5,5 +5,12 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="Theme.FasTravel.Splash" parent="Theme.SplashScreen">
+
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/logo_fastravel</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+    </style>
+
     <style name="Theme.FasTravel" parent="Base.Theme.FasTravel" />
 </resources>
