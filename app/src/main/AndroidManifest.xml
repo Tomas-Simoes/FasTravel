@@ -12,14 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FasTravel">
         <activity
-            android:name=".frontend.MainActivity"
-            android:exported="true">
+            android:name=".frontend.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FasTravel.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".frontend.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
