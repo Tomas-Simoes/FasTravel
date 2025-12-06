@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.maps.android.PolyUtil;
 import com.google.android.gms.tasks.Task;
@@ -98,6 +100,14 @@ public class BuscarRotaFragment extends Fragment {
 
     private PlacesClient placesClient;
 
+    private MaterialCardView fabMain;
+
+    private FloatingActionButton fab1, fab2, fab3;
+    private TextView tvIniciais;
+    private boolean isFabOpen = false;
+    private FrameLayout menuFabContainer;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -106,10 +116,41 @@ public class BuscarRotaFragment extends Fragment {
 
         apiKey = getString(R.string.google_maps_key);
 
+        // Bottom Sheet setup
         MaterialCardView bottomSheet = view.findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setHideable(false);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        // FAB Menu setup
+        menuFabContainer = view.findViewById(R.id.menu_fab_container);
+        fabMain = view.findViewById(R.id.fab_main);
+        fab1 = view.findViewById(R.id.fab_1);
+        fab2 = view.findViewById(R.id.fab_2);
+        fab3 = view.findViewById(R.id.fab_3);
+        tvIniciais = view.findViewById(R.id.tv_iniciais);
+
+        // Define iniciais do utilizador (podes buscar do perfil depois)
+        tvIniciais.setText("JD");
+
+        // Listener do botão principal
+        fabMain.setOnClickListener(v -> toggleFabMenu());
+
+        // Listeners dos sub-botões
+        fab1.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Perfil", Toast.LENGTH_SHORT).show();
+            closeFabMenu();
+        });
+
+        fab2.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Histórico", Toast.LENGTH_SHORT).show();
+            closeFabMenu();
+        });
+
+        fab3.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Definições", Toast.LENGTH_SHORT).show();
+            closeFabMenu();
+        });
 
         // Inputs
         inputPontoA = view.findViewById(R.id.input_ponto_a);
@@ -664,4 +705,79 @@ public class BuscarRotaFragment extends Fragment {
             return routes.size();
         }
     }
+
+    private void toggleFabMenu() {
+        if (isFabOpen) {
+            closeFabMenu();
+        } else {
+            openFabMenu();
+        }
+    }
+
+    private void openFabMenu() {
+        // Torna os FABs visíveis
+        fab1.setVisibility(View.VISIBLE);
+        fab2.setVisibility(View.VISIBLE);
+        fab3.setVisibility(View.VISIBLE);
+
+        // Estado inicial: escondidos abaixo
+        fab1.setAlpha(0f);
+        fab2.setAlpha(0f);
+        fab3.setAlpha(0f);
+
+        fab1.setTranslationY(100f);
+        fab2.setTranslationY(100f);
+        fab3.setTranslationY(100f);
+
+        // Animação para cima (translationY = 0 vai para a posição definida no XML)
+        fab1.animate()
+                .translationY(0)
+                .alpha(1)
+                .setDuration(200)
+                .setStartDelay(0)
+                .start();
+
+        fab2.animate()
+                .translationY(0)
+                .alpha(1)
+                .setDuration(200)
+                .setStartDelay(50)
+                .start();
+
+        fab3.animate()
+                .translationY(0)
+                .alpha(1)
+                .setDuration(200)
+                .setStartDelay(100)
+                .start();
+
+        isFabOpen = true;
+    }
+
+    private void closeFabMenu() {
+        // Animação para baixo
+        fab1.animate()
+                .translationY(100f)
+                .alpha(0)
+                .setDuration(150)
+                .withEndAction(() -> fab1.setVisibility(View.GONE))
+                .start();
+
+        fab2.animate()
+                .translationY(100f)
+                .alpha(0)
+                .setDuration(150)
+                .withEndAction(() -> fab2.setVisibility(View.GONE))
+                .start();
+
+        fab3.animate()
+                .translationY(100f)
+                .alpha(0)
+                .setDuration(150)
+                .withEndAction(() -> fab3.setVisibility(View.GONE))
+                .start();
+
+        isFabOpen = false;
+    }
+
 }

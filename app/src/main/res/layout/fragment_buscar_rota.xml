@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Mapa full screen com gradiente overlay -->
+    <!-- Mapa full screen com gradiente overlay + FAB -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,6 +22,83 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/gradient_top_overlay" />
+
+        <!-- 🔹 FAB MENU AQUI DENTRO DO FRAMELAYOUT DO MAPA -->
+        <FrameLayout
+            android:id="@+id/menu_fab_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="140dp"
+            android:layout_gravity="bottom|end">
+
+            <!-- Botão 3 (mais acima) -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="180dp"
+                android:src="@drawable/ic_settings"
+                app:fabSize="normal"
+                app:tint="@android:color/white"
+                android:visibility="gone"
+                android:alpha="0"/>
+
+            <!-- Botão 2 (meio) -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="120dp"
+                android:src="@drawable/ic_history"
+                app:fabSize="normal"
+                app:tint="@android:color/white"
+                android:visibility="gone"
+                android:alpha="0"/>
+
+            <!-- Botão 1 (mais baixo) -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="60dp"
+                android:src="@drawable/ic_person"
+                app:fabSize="normal"
+                app:tint="@android:color/white"
+                android:visibility="gone"
+                android:alpha="0"/>
+
+            <!-- BOTÃO PRINCIPAL COM INICIAIS -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fab_main"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom|end"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="12dp"
+                app:cardBackgroundColor="#3B82F6"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/tv_iniciais"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="JD"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+            </com.google.android.material.card.MaterialCardView>
+
+        </FrameLayout>
 
     </FrameLayout>
 
