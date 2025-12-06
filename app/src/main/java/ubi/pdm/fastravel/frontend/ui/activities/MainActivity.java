@@ -20,33 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new ThemedRoutesFragment())
+                    .replace(android.R.id.content, new BuscarRotaFragment())
                     .commit();
         }
     }
 
-    // Listener para navegação entre fragments
-    private final BottomNavigationView.OnItemSelectedListener navListener =
-            item -> {
-                Fragment selectedFragment = null;
-                int itemId = item.getItemId();
-
-                if (itemId == R.id.nav_buscar) {
-                    selectedFragment = new BuscarRotaFragment();
-                } else if (itemId == R.id.nav_historico) {
-                    selectedFragment = new HistoricoFragment();
-                } else if (itemId == R.id.nav_perfil) {
-                    selectedFragment = new PerfilFragment();
-                } else if (itemId == R.id.search_bar_card) {
-                    selectedFragment = new ThemedRoutesFragment();
-                }
-
-                if (selectedFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, selectedFragment)
-                            .commit();
-                }
-
-                return true;
-            };
 }
