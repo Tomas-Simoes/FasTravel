@@ -75,7 +75,9 @@ import java.util.Collections;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
-import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
+import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
+import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
+import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
 
 public class BuscarRotaFragment extends Fragment {
 
@@ -109,7 +111,7 @@ public class BuscarRotaFragment extends Fragment {
 
     private MaterialCardView fabMain;
 
-    private FloatingActionButton fab1, fab2, fab3, fabThemedRoutes;
+    private FloatingActionButton fab1, fabHistory, fab3, fabThemedRoutes;
     private TextView tvIniciais;
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
@@ -230,6 +232,9 @@ public class BuscarRotaFragment extends Fragment {
                     }
                 }
             });
+
+    private final ActivityResultLauncher<Intent> historyLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {});
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -249,11 +254,9 @@ public class BuscarRotaFragment extends Fragment {
         menuFabContainer = view.findViewById(R.id.menu_fab_container);
         fabMain = view.findViewById(R.id.fab_main);
         fab1 = view.findViewById(R.id.fab_1);
-        fab2 = view.findViewById(R.id.fab_2);
+        fabHistory = view.findViewById(R.id.fab_2);
         fab3 = view.findViewById(R.id.fab_3);
         fabThemedRoutes = view.findViewById(R.id.fab_themed_routes);
-
-
 
         tvIniciais = view.findViewById(R.id.tv_iniciais);
 
@@ -285,8 +288,9 @@ public class BuscarRotaFragment extends Fragment {
             closeFabMenu();
         });
 
-        fab2.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Histórico", Toast.LENGTH_SHORT).show();
+        fabHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), HistoryActivity.class);
+            historyLauncher.launch(intent);
             closeFabMenu();
         });
 
@@ -1108,16 +1112,16 @@ public class BuscarRotaFragment extends Fragment {
 
     private void openFabMenu() {
         fab1.setVisibility(View.VISIBLE);
-        fab2.setVisibility(View.VISIBLE);
+        fabHistory.setVisibility(View.VISIBLE);
         fab3.setVisibility(View.VISIBLE);
         fabThemedRoutes.setVisibility(View.VISIBLE);
 
 
-        fab1.setAlpha(0f); fab2.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
-        fab1.setTranslationY(100f); fab2.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
+        fab1.setAlpha(0f); fabHistory.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
+        fab1.setTranslationY(100f); fabHistory.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
 
         fab1.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
-        fab2.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
+        fabHistory.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
         fab3.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(100).start();
         fabThemedRoutes.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(150).start();
 
@@ -1127,7 +1131,7 @@ public class BuscarRotaFragment extends Fragment {
     private void closeFabMenu() {
 
         fab1.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab1.setVisibility(View.GONE)).start();
-        fab2.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab2.setVisibility(View.GONE)).start();
+        fabHistory.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabHistory.setVisibility(View.GONE)).start();
         fab3.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab3.setVisibility(View.GONE)).start();
         fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
 

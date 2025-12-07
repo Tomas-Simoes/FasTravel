@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
-import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
 
 public class ThemedRoutesController extends RecyclerView.Adapter<ThemedRoutesController.RouteViewHolder> {
 

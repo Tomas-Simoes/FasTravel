@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend.ui.fragments;
+package ubi.pdm.fastravel.frontend.ui.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,7 +27,7 @@ import java.util.List;
 import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoutesController;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoutesService;
-import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
+import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 
 public class ThemedRoutesActivity extends AppCompatActivity {
 

@@ -24,7 +24,8 @@
         </activity>
 
         <activity android:name=".frontend.ui.activities.MainActivity" />
-        <activity android:name=".frontend.ui.fragments.ThemedRoutesActivity" />
+        <activity android:name=".frontend.ui.activities.ThemedRoutesActivity" />
+        <activity android:name=".frontend.ui.activities.HistoryActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

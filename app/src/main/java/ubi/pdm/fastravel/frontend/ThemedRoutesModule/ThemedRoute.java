@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend.routes;
+package ubi.pdm.fastravel.frontend.ThemedRoutesModule;
 import java.io.Serializable;
 public class ThemedRoute implements Serializable {
     private String title;

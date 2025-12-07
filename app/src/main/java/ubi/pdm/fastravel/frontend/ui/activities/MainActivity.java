@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.ui.fragments.BuscarRotaFragment;
-import ubi.pdm.fastravel.frontend.ui.fragments.ThemedRoutesActivity;
 
 public class MainActivity extends AppCompatActivity {
 
