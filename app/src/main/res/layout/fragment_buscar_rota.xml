@@ -17,11 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <!-- Overlay gradiente sutil -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/gradient_top_overlay" />
 
         <!-- 🔹 FAB MENU AQUI DENTRO DO FRAMELAYOUT DO MAPA -->
         <FrameLayout
@@ -102,79 +97,6 @@
 
     </FrameLayout>
 
-    <!-- Floating Search Bar com glassmorphism -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/search_bar_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="100dp"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="12dp"
-        app:cardBackgroundColor="#F5FFFFFF">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@android:color/transparent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/gradient_primary"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search"
-                        app:tint="@android:color/white" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Where to?"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#0F172A"
-                    android:fontFamily="sans-serif-medium" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search destinations &amp; routes"
-                    android:textSize="12sp"
-                    android:textColor="#64748B" />
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_chevron_right"
-                app:tint="#94A3B8" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
     <!-- Bottom Sheet moderno -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottom_sheet"
@@ -208,6 +130,7 @@
 
             <!-- Conteúdo do bottom sheet -->
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/bottom_sheet_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fillViewport="true">
@@ -503,6 +426,7 @@
                     </HorizontalScrollView>
 
                     <!-- Modos transporte redesigned -->
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -523,64 +447,119 @@
                         app:chipSpacingHorizontal="8dp">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_comboio"
+                            android:id="@+id/chip_carro"
                             style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:text="Train"
+                            android:layout_height="wrap_content"
+                            android:text=""
                             android:textColor="@color/chip_text_color"
                             android:checked="true"
                             app:chipBackgroundColor="@color/chip_background"
                             app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
-                            app:chipCornerRadius="24dp"
+                            app:chipCornerRadius="28dp"
+                            app:chipMinHeight="56dp"
+                            app:chipIconSize="32dp"
+                            app:chipStartPadding="12dp"
+                            app:chipEndPadding="12dp"
+                            app:iconStartPadding="0dp"
+                            app:iconEndPadding="0dp"
+                            app:textStartPadding="0dp"
+                            app:textEndPadding="0dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_car"
+                            app:checkedIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_pe"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/chip_text_color"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="28dp"
+                            app:chipMinHeight="56dp"
+                            app:chipIconSize="32dp"
+                            app:chipStartPadding="12dp"
+                            app:chipEndPadding="12dp"
+                            app:iconStartPadding="0dp"
+                            app:iconEndPadding="0dp"
+                            app:textStartPadding="0dp"
+                            app:textEndPadding="0dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_walk"
+                            app:checkedIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_comboio"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/chip_text_color"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="28dp"
+                            app:chipMinHeight="56dp"
+                            app:chipIconSize="32dp"
+                            app:chipStartPadding="12dp"
+                            app:chipEndPadding="12dp"
+                            app:iconStartPadding="0dp"
+                            app:iconEndPadding="0dp"
+                            app:textStartPadding="0dp"
+                            app:textEndPadding="0dp"
                             app:chipIconVisible="true"
                             app:chipIcon="@drawable/ic_train"
+                            app:checkedIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_bicicleta"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/chip_text_color"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp"
+                            app:chipCornerRadius="28dp"
+                            app:chipMinHeight="56dp"
+                            app:chipIconSize="32dp"
+                            app:chipStartPadding="12dp"
+                            app:chipEndPadding="12dp"
+                            app:iconStartPadding="0dp"
+                            app:iconEndPadding="0dp"
+                            app:textStartPadding="0dp"
+                            app:textEndPadding="0dp"
+                            app:chipIconVisible="true"
+                            app:chipIcon="@drawable/ic_bike"
                             app:checkedIconVisible="false" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_autocarro"
                             style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:text="Bus"
+                            android:layout_height="wrap_content"
+                            android:text=""
                             android:textColor="@color/chip_text_color"
                             app:chipBackgroundColor="@color/chip_background"
                             app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
-                            app:chipCornerRadius="24dp"
+                            app:chipCornerRadius="28dp"
+                            app:chipMinHeight="56dp"
+                            app:chipIconSize="32dp"
+                            app:chipStartPadding="12dp"
+                            app:chipEndPadding="12dp"
+                            app:iconStartPadding="0dp"
+                            app:iconEndPadding="0dp"
+                            app:textStartPadding="0dp"
+                            app:textEndPadding="0dp"
                             app:chipIconVisible="true"
                             app:chipIcon="@drawable/ic_bus"
-                            app:checkedIconVisible="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_uber"
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:text="Rideshare"
-                            android:textColor="@color/chip_text_color"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
-                            app:chipStrokeWidth="1dp"
-                            app:chipCornerRadius="24dp"
-                            app:chipIconVisible="true"
-                            app:chipIcon="@drawable/ic_car"
-                            app:checkedIconVisible="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_misto"
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:text="Mixed"
-                            android:textColor="@color/chip_text_color"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
-                            app:chipStrokeWidth="1dp"
-                            app:chipCornerRadius="24dp"
-                            app:chipIconVisible="true"
-                            app:chipIcon="@drawable/ic_route"
                             app:checkedIconVisible="false" />
                     </com.google.android.material.chip.ChipGroup>
 

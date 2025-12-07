@@ -25,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -122,6 +123,8 @@ public class BuscarRotaFragment extends Fragment {
 
     private SharedPreferences prefs;
 
+    private NestedScrollView bottomSheetScroll;
+
     private enum FavoriteType {
         HOME,
         WORK,
@@ -143,6 +146,7 @@ public class BuscarRotaFragment extends Fragment {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setHideable(false);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetScroll = view.findViewById(R.id.bottom_sheet_scroll);
 
         // FAB Menu setup
         menuFabContainer = view.findViewById(R.id.menu_fab_container);
@@ -249,6 +253,8 @@ public class BuscarRotaFragment extends Fragment {
 
                     drawRoute(route.routePoints);
 
+                    bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
+
                     if (bottomSheetBehavior != null) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     }
@@ -269,29 +275,35 @@ public class BuscarRotaFragment extends Fragment {
             }
 
             int checkedId = chipGroupTransporte.getCheckedChipId();
+
             String mode = "driving";
             String transitMode = null;
             String modoLabel = "Carro";
 
-            if (checkedId == R.id.chip_comboio) {
+            if (checkedId == R.id.chip_pe) {
+                mode = "walking";
+                transitMode = null;
+                modoLabel = "A pé";
+
+            } else if (checkedId == R.id.chip_comboio) {
                 mode = "transit";
                 transitMode = "train";
                 modoLabel = "Comboio";
+
+            } else if (checkedId == R.id.chip_bicicleta) {
+                mode = "bicycling";
+                transitMode = null;
+                modoLabel = "Bicicleta";
+
             } else if (checkedId == R.id.chip_autocarro) {
                 mode = "transit";
                 transitMode = "bus";
                 modoLabel = "Autocarro";
-            } else if (checkedId == R.id.chip_misto) {
-                mode = "transit";
-                transitMode = null;
-                modoLabel = "Transportes (misto)";
-            } else if (checkedId == R.id.chip_uber) {
+
+            } else if (checkedId == R.id.chip_carro) {
                 mode = "driving";
                 transitMode = null;
-                modoLabel = "Uber (rota de carro)";
-                Toast.makeText(getContext(),
-                        "Uber real (preço/tempo) precisa integração com a API da Uber. Para já é rota de carro.",
-                        Toast.LENGTH_SHORT).show();
+                modoLabel = "Carro";
             }
 
             Toast.makeText(getContext(),
@@ -299,6 +311,9 @@ public class BuscarRotaFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
 
             requestRoute(pontoA, pontoB, mode, transitMode);
+
+            bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
+
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
 
