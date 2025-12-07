@@ -114,7 +114,6 @@ public class BuscarRotaFragment extends Fragment {
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
 
-<<<<<<< Updated upstream
     private LinearLayout favoritoCasa;
     private LinearLayout favoritoTrabalho;
     private LinearLayout btnAdicionarFavorito;
@@ -134,13 +133,10 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     private FavoriteType tipoFavoritoAtual;
-=======
     private final ActivityResultLauncher<Intent> themedRouteLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     ThemedRoute selectedRoute = (ThemedRoute) result.getData().getSerializableExtra("selected_themed_route");
->>>>>>> Stashed changes
-
                     if (selectedRoute != null) {
                         String fullPath = selectedRoute.getPathText();
                         List<String> places = Arrays.asList(fullPath.split("  →  "));
@@ -421,15 +417,10 @@ public class BuscarRotaFragment extends Fragment {
                     "A calcular rota de " + pontoA + " para " + pontoB + " via " + modoLabel,
                     Toast.LENGTH_SHORT).show();
 
-<<<<<<< Updated upstream
-            requestRoute(pontoA, pontoB, mode, transitMode);
-
+            requestRoute(pontoA, pontoB, mode, transitMode, null);
             bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
-=======
-            requestRoute(pontoA, pontoB, mode, transitMode, null);
->>>>>>> Stashed changes
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED); houve um conflito no commit e não sei qual dos dois é o certo
         });
 
         return view;
@@ -1007,10 +998,7 @@ public class BuscarRotaFragment extends Fragment {
                 .append("&mode=").append(mode)
                 .append("&alternatives=true");
 
-<<<<<<< Updated upstream
         params.append("&language=pt-PT");
-=======
-        // Adicionar os waypoints se existirem
         if (waypoints != null && !waypoints.isEmpty()) {
             params.append("&waypoints=");
             for (int i = 0; i < waypoints.size(); i++) {
@@ -1018,7 +1006,6 @@ public class BuscarRotaFragment extends Fragment {
                 params.append(URLEncoder.encode(waypoints.get(i), "UTF-8"));
             }
         }
->>>>>>> Stashed changes
 
         if ("transit".equals(mode) && transitMode != null) {
             params.append("&transit_mode=").append(transitMode);
@@ -1125,36 +1112,7 @@ public class BuscarRotaFragment extends Fragment {
         fab3.setVisibility(View.VISIBLE);
         fabThemedRoutes.setVisibility(View.VISIBLE);
 
-<<<<<<< Updated upstream
-        fab1.setAlpha(0f);
-        fab2.setAlpha(0f);
-        fab3.setAlpha(0f);
 
-        fab1.setTranslationY(100f);
-        fab2.setTranslationY(100f);
-        fab3.setTranslationY(100f);
-
-        fab1.animate()
-                .translationY(0)
-                .alpha(1)
-                .setDuration(200)
-                .setStartDelay(0)
-                .start();
-
-        fab2.animate()
-                .translationY(0)
-                .alpha(1)
-                .setDuration(200)
-                .setStartDelay(50)
-                .start();
-
-        fab3.animate()
-                .translationY(0)
-                .alpha(1)
-                .setDuration(200)
-                .setStartDelay(100)
-                .start();
-=======
         fab1.setAlpha(0f); fab2.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
         fab1.setTranslationY(100f); fab2.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
 
@@ -1162,39 +1120,16 @@ public class BuscarRotaFragment extends Fragment {
         fab2.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
         fab3.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(100).start();
         fabThemedRoutes.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(150).start();
->>>>>>> Stashed changes
 
         isFabOpen = true;
     }
 
     private void closeFabMenu() {
-<<<<<<< Updated upstream
-        fab1.animate()
-                .translationY(100f)
-                .alpha(0)
-                .setDuration(150)
-                .withEndAction(() -> fab1.setVisibility(View.GONE))
-                .start();
 
-        fab2.animate()
-                .translationY(100f)
-                .alpha(0)
-                .setDuration(150)
-                .withEndAction(() -> fab2.setVisibility(View.GONE))
-                .start();
-
-        fab3.animate()
-                .translationY(100f)
-                .alpha(0)
-                .setDuration(150)
-                .withEndAction(() -> fab3.setVisibility(View.GONE))
-                .start();
-=======
         fab1.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab1.setVisibility(View.GONE)).start();
         fab2.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab2.setVisibility(View.GONE)).start();
         fab3.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab3.setVisibility(View.GONE)).start();
         fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
->>>>>>> Stashed changes
 
         isFabOpen = false;
     }
