@@ -1,11 +1,12 @@
 <androidx.cardview.widget.CardView
+    android:id="@+id/frontCardRoot"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="350dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="8dp"
+    app:cardElevation="2dp"
     app:cardMaxElevation="12dp"
     android:foreground="?attr/selectableItemBackground">
 

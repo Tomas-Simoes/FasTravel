@@ -1,42 +1,33 @@
 package ubi.pdm.fastravel.frontend.routes;
-
-public class ThemedRoute {
-    private int id;
+import java.io.Serializable;
+public class ThemedRoute implements Serializable {
     private String title;
-    private String icon;
     private String color;
-    private String description;
-    private String details;
-    private String duration;
-    private int stops;
-    private int imageResId; // Novo campo para a imagem
-    private String imageUrl; // Opcional: para imagens da internet
+    private int imageResId;
+    private String photoUrl;
+    private String distanceText;
+    private String timeText;
+    private String pathText;
 
-    public ThemedRoute(int id, String title, String icon, String color,
-                       String description, String details, String duration,
-                       int stops, int imageResId) {
-        this.id = id;
+    public ThemedRoute( String title, String color, int imageResId, String photoUrl, String distanceText, String timeText, String pathText){
+
         this.title = title;
-        this.icon = icon;
         this.color = color;
-        this.description = description;
-        this.details = details;
-        this.duration = duration;
-        this.stops = stops;
         this.imageResId = imageResId;
+
+        this.photoUrl = photoUrl;
+        this.distanceText = distanceText;
+        this.timeText = timeText;
+        this.pathText = pathText;
     }
 
-    // Getters
-    public int getId() { return id; }
-    public String getTitle() { return title; }
-    public String getIcon() { return icon; }
-    public String getColor() { return color; }
-    public String getDescription() { return description; }
-    public String getDetails() { return details; }
-    public String getDuration() { return duration; }
-    public int getStops() { return stops; }
-    public int getImageResId() { return imageResId; }
-    public String getImageUrl() { return imageUrl; }
+    public String getPhotoUrl() { return photoUrl; }
+    public String getDistanceText() { return distanceText; }
+    public String getTimeText() { return timeText; }
+    public String getPathText() { return pathText; }
 
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getTitle() { return title; }
+
+    public String getColor() { return color; }
+    public int getImageResId() { return imageResId;}
 }

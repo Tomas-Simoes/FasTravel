@@ -75,6 +75,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
 
 public class BuscarRotaFragment extends Fragment {
 
@@ -108,11 +109,12 @@ public class BuscarRotaFragment extends Fragment {
 
     private MaterialCardView fabMain;
 
-    private FloatingActionButton fab1, fab2, fab3;
+    private FloatingActionButton fab1, fab2, fab3, fabThemedRoutes;
     private TextView tvIniciais;
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
 
+<<<<<<< Updated upstream
     private LinearLayout favoritoCasa;
     private LinearLayout favoritoTrabalho;
     private LinearLayout btnAdicionarFavorito;
@@ -132,7 +134,106 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     private FavoriteType tipoFavoritoAtual;
+=======
+    private final ActivityResultLauncher<Intent> themedRouteLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    ThemedRoute selectedRoute = (ThemedRoute) result.getData().getSerializableExtra("selected_themed_route");
+>>>>>>> Stashed changes
 
+                    if (selectedRoute != null) {
+                        String fullPath = selectedRoute.getPathText();
+                        List<String> places = Arrays.asList(fullPath.split("  →  "));
+
+                        if (places.size() >= 2) {
+                            // 1. Define os pontos chave da rota temática
+                            String originalOrigin = places.get(0); // A origem da rota temática (agora o 1º waypoint)
+                            String destination = places.get(places.size() - 1);
+
+                            // 2. Waypoints interiores (se existirem)
+                            List<String> originalInnerWaypoints = new ArrayList<>();
+                            if (places.size() > 2) {
+                                // Pega os stops entre a origem e o destino
+                                originalInnerWaypoints.addAll(places.subList(1, places.size() - 1));
+                            }
+
+                            // Lista de waypoints com a ORIGEM ORIGINAL no início
+                            List<String> waypointsWithOriginalOriginAsFirst = new ArrayList<>();
+                            waypointsWithOriginalOriginAsFirst.add(originalOrigin);
+                            waypointsWithOriginalOriginAsFirst.addAll(originalInnerWaypoints);
+
+                            // 3. Verifica a Permissão de Localização
+                            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                                // ❌ Permissão Negada: Reverte para a origem original da rota temática
+                                Toast.makeText(getContext(), "Permissão de localização negada. A usar a origem original da rota.", Toast.LENGTH_LONG).show();
+
+                                inputPontoA.setText(originalOrigin);
+                                inputPontoB.setText(destination);
+
+                                requestRoute(
+                                        originalOrigin,
+                                        destination,
+                                        "driving",
+                                        null,
+                                        originalInnerWaypoints // Sem a origem original
+                                );
+                                return;
+                            }
+
+                            fused.getLastLocation().addOnSuccessListener(location -> {
+                                String finalOrigin;
+                                List<String> finalWaypoints;
+                                String originDisplayText;
+
+                                if (location != null) {
+                                    finalOrigin = location.getLatitude() + "," + location.getLongitude();
+
+                                    // O primeiro waypoint é o ponto de partida original da rota
+                                    finalWaypoints = waypointsWithOriginalOriginAsFirst;
+
+                                    // NOTA: Pode usar um String Resource como R.string.my_location
+                                    originDisplayText = "Sua Localização Atual";
+
+                                } else {
+                                    // ⚠️ Falha Temporária (ex: GPS desligado): Reverte para a origem original
+                                    Toast.makeText(getContext(), "Não foi possível obter a sua localização. A usar a origem original da rota.", Toast.LENGTH_LONG).show();
+
+                                    finalOrigin = originalOrigin;
+                                    finalWaypoints = originalInnerWaypoints;
+                                    originDisplayText = originalOrigin;
+                                }
+
+                                // 5. Atualiza UI e chama a rota
+                                inputPontoA.setText(originDisplayText);
+                                inputPontoB.setText(destination);
+
+                                requestRoute(
+                                        finalOrigin,
+                                        destination,
+                                        "driving",
+                                        null,
+                                        finalWaypoints
+                                );
+                            }).addOnFailureListener(e -> {
+                                // ❌ Falha Assíncrona: Reverte para a origem original
+                                Toast.makeText(getContext(), "Erro ao obter localização. A usar a origem original da rota.", Toast.LENGTH_LONG).show();
+
+                                inputPontoA.setText(originalOrigin);
+                                inputPontoB.setText(destination);
+
+                                requestRoute(
+                                        originalOrigin,
+                                        destination,
+                                        "driving",
+                                        null,
+                                        originalInnerWaypoints
+                                );
+                            });
+                        }
+                    }
+                }
+            });
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -154,6 +255,10 @@ public class BuscarRotaFragment extends Fragment {
         fab1 = view.findViewById(R.id.fab_1);
         fab2 = view.findViewById(R.id.fab_2);
         fab3 = view.findViewById(R.id.fab_3);
+        fabThemedRoutes = view.findViewById(R.id.fab_themed_routes);
+
+
+
         tvIniciais = view.findViewById(R.id.tv_iniciais);
 
         containerFavoritos = view.findViewById(R.id.container_favoritos);
@@ -191,6 +296,12 @@ public class BuscarRotaFragment extends Fragment {
 
         fab3.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Definições", Toast.LENGTH_SHORT).show();
+            closeFabMenu();
+        });
+
+        fabThemedRoutes.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), ThemedRoutesActivity.class);
+            themedRouteLauncher.launch(intent);
             closeFabMenu();
         });
 
@@ -310,10 +421,14 @@ public class BuscarRotaFragment extends Fragment {
                     "A calcular rota de " + pontoA + " para " + pontoB + " via " + modoLabel,
                     Toast.LENGTH_SHORT).show();
 
+<<<<<<< Updated upstream
             requestRoute(pontoA, pontoB, mode, transitMode);
 
             bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
+=======
+            requestRoute(pontoA, pontoB, mode, transitMode, null);
+>>>>>>> Stashed changes
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
 
@@ -752,10 +867,11 @@ public class BuscarRotaFragment extends Fragment {
 
     // ============= DIRECTIONS / ROTAS ============= //
 
-    private void requestRoute(String origin, String destination, String mode, @Nullable String transitMode) {
+    private void requestRoute(String origin, String destination, String mode,
+                              @Nullable String transitMode, @Nullable List<String> waypoints) {
         new Thread(() -> {
             try {
-                String urlString = buildDirectionsUrl(origin, destination, mode, transitMode);
+                String urlString = buildDirectionsUrl(origin, destination, mode, transitMode, waypoints);
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -765,13 +881,9 @@ public class BuscarRotaFragment extends Fragment {
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 StringBuilder sb = new StringBuilder();
                 String line;
+                while ((line = br.readLine()) != null) sb.append(line);
 
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                String json = sb.toString();
-                List<RouteInfo> routes = parseRoutes(json);
+                List<RouteInfo> routes = parseRoutes(sb.toString());
 
                 requireActivity().runOnUiThread(() -> {
                     if (routes.isEmpty()) {
@@ -784,12 +896,6 @@ public class BuscarRotaFragment extends Fragment {
                     currentRoutes.clear();
                     currentRoutes.addAll(routes);
                     routeAdapter.notifyDataSetChanged();
-
-                    View tvResultados = requireView().findViewById(R.id.tv_resultados_titulo);
-                    tvResultados.setVisibility(View.VISIBLE);
-                    recyclerRotas.setVisibility(View.VISIBLE);
-
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 });
 
             } catch (Exception e) {
@@ -799,6 +905,7 @@ public class BuscarRotaFragment extends Fragment {
             }
         }).start();
     }
+
 
     private List<RouteInfo> parseRoutes(String json) throws JSONException {
         List<RouteInfo> routes = new ArrayList<>();
@@ -886,7 +993,8 @@ public class BuscarRotaFragment extends Fragment {
         return routes;
     }
 
-    private String buildDirectionsUrl(String origin, String destination, String mode, @Nullable String transitMode)
+    private String buildDirectionsUrl(String origin, String destination, String mode,
+                                      @Nullable String transitMode, @Nullable List<String> waypoints)
             throws UnsupportedEncodingException {
 
         String strOrigin = "origin=" + URLEncoder.encode(origin, "UTF-8");
@@ -899,7 +1007,18 @@ public class BuscarRotaFragment extends Fragment {
                 .append("&mode=").append(mode)
                 .append("&alternatives=true");
 
+<<<<<<< Updated upstream
         params.append("&language=pt-PT");
+=======
+        // Adicionar os waypoints se existirem
+        if (waypoints != null && !waypoints.isEmpty()) {
+            params.append("&waypoints=");
+            for (int i = 0; i < waypoints.size(); i++) {
+                if (i > 0) params.append("|");
+                params.append(URLEncoder.encode(waypoints.get(i), "UTF-8"));
+            }
+        }
+>>>>>>> Stashed changes
 
         if ("transit".equals(mode) && transitMode != null) {
             params.append("&transit_mode=").append(transitMode);
@@ -909,6 +1028,7 @@ public class BuscarRotaFragment extends Fragment {
 
         return "https://maps.googleapis.com/maps/api/directions/json?" + params;
     }
+
 
     private void drawRoute(List<LatLng> routePoints) {
         if (map == null || routePoints == null || routePoints.isEmpty()) {
@@ -1003,7 +1123,9 @@ public class BuscarRotaFragment extends Fragment {
         fab1.setVisibility(View.VISIBLE);
         fab2.setVisibility(View.VISIBLE);
         fab3.setVisibility(View.VISIBLE);
+        fabThemedRoutes.setVisibility(View.VISIBLE);
 
+<<<<<<< Updated upstream
         fab1.setAlpha(0f);
         fab2.setAlpha(0f);
         fab3.setAlpha(0f);
@@ -1032,11 +1154,21 @@ public class BuscarRotaFragment extends Fragment {
                 .setDuration(200)
                 .setStartDelay(100)
                 .start();
+=======
+        fab1.setAlpha(0f); fab2.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
+        fab1.setTranslationY(100f); fab2.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
+
+        fab1.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
+        fab2.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
+        fab3.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(100).start();
+        fabThemedRoutes.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(150).start();
+>>>>>>> Stashed changes
 
         isFabOpen = true;
     }
 
     private void closeFabMenu() {
+<<<<<<< Updated upstream
         fab1.animate()
                 .translationY(100f)
                 .alpha(0)
@@ -1057,6 +1189,12 @@ public class BuscarRotaFragment extends Fragment {
                 .setDuration(150)
                 .withEndAction(() -> fab3.setVisibility(View.GONE))
                 .start();
+=======
+        fab1.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab1.setVisibility(View.GONE)).start();
+        fab2.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab2.setVisibility(View.GONE)).start();
+        fab3.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab3.setVisibility(View.GONE)).start();
+        fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
+>>>>>>> Stashed changes
 
         isFabOpen = false;
     }

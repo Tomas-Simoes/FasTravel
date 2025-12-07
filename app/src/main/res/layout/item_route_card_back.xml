@@ -1,53 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardBack"
     android:layout_width="match_parent"
-    android:layout_height="800dp"
+    android:layout_height="350dp"
     android:layout_margin="8dp"
-    android:foreground="?attr/selectableItemBackground"
-    android:background="@drawable/card_front_bg">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    android:visibility="gone"
+    android:alpha="0">
 
     <LinearLayout
-        android:id="@+id/frontCard"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/white">
 
-        <ImageView
-            android:id="@+id/iconFront"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:tint="@android:color/white" />
-
-        <TextView
-            android:id="@+id/titleFront"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/backHeader"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="12dp" />
+            android:padding="16dp"
+            android:gravity="start"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/descriptionFront"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            android:gravity="center"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:id="@+id/titleBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Título da Rota"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
 
-        <TextView
-            android:id="@+id/durationFront"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/statsBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2h 30m • 5km"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:background="@drawable/tag_bg"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/routeScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ITINERÁRIO COMPLETO"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#757575"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/fullRouteText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ponto A \n ↓ \n Ponto B"
+                    android:lineSpacingExtra="4dp"
+                    android:textSize="14sp"
+                    android:textColor="#212121"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:background="@drawable/tag_bg"
-            android:padding="6dp"
-            android:layout_marginTop="8dp" />
+            android:padding="16dp"
+            android:background="#F5F5F5">
+
+            <Button
+                android:id="@+id/btnStartRoute"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Iniciar Rota"
+                android:backgroundTint="#212121"
+                android:textColor="@android:color/white"
+                app:cornerRadius="8dp"/>
+        </FrameLayout>
 
     </LinearLayout>
-
-</FrameLayout>
+</androidx.cardview.widget.CardView>
