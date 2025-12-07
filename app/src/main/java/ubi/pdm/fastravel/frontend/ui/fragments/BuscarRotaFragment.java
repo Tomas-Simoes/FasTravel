@@ -2,10 +2,15 @@ package ubi.pdm.fastravel.frontend.ui.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +112,23 @@ public class BuscarRotaFragment extends Fragment {
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
 
+    private LinearLayout favoritoCasa;
+    private LinearLayout favoritoTrabalho;
+    private LinearLayout btnAdicionarFavorito;
+    private LinearLayout containerFavoritos;
+
+    private TextView textSubtituloCasa;
+    private TextView textSubtituloTrabalho;
+
+    private SharedPreferences prefs;
+
+    private enum FavoriteType {
+        HOME,
+        WORK,
+        OTHER
+    }
+
+    private FavoriteType tipoFavoritoAtual;
 
     @Nullable
     @Override
@@ -130,7 +152,23 @@ public class BuscarRotaFragment extends Fragment {
         fab3 = view.findViewById(R.id.fab_3);
         tvIniciais = view.findViewById(R.id.tv_iniciais);
 
-        // Define iniciais do utilizador (podes buscar do perfil depois)
+        containerFavoritos = view.findViewById(R.id.container_favoritos);
+        favoritoCasa = view.findViewById(R.id.favorito_casa);
+        favoritoTrabalho = view.findViewById(R.id.favorito_trabalho);
+        btnAdicionarFavorito = view.findViewById(R.id.btn_adicionar_favorito);
+
+        textSubtituloCasa = view.findViewById(R.id.text_subtitulo_casa);
+        textSubtituloTrabalho = view.findViewById(R.id.text_subtitulo_trabalho);
+
+        // SharedPreferences
+        prefs = requireContext().getSharedPreferences("fastravel_prefs", Context.MODE_PRIVATE);
+
+        setUpFavouriteClicks();
+
+        loadFavourites();
+        loadExtraFavourites();
+
+        // Iniciais do utilizador
         tvIniciais.setText("JD");
 
         // Listener do botão principal
@@ -156,7 +194,6 @@ public class BuscarRotaFragment extends Fragment {
         inputPontoA = view.findViewById(R.id.input_ponto_a);
         inputPontoB = view.findViewById(R.id.input_ponto_b);
 
-        // til_ponto_a e til_ponto_b agora são LinearLayout
         LinearLayout tilPontoA = view.findViewById(R.id.til_ponto_a);
         LinearLayout tilPontoB = view.findViewById(R.id.til_ponto_b);
 
@@ -164,12 +201,13 @@ public class BuscarRotaFragment extends Fragment {
         inputPontoA.setFocusable(false);
         inputPontoA.setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            openAutocomplete(REQ_AUTOCOMPLETE_ORIGIN);
+            openAutocomplete(REQ_AUTOCOMPLETE_ORIGIN, null);
         });
+
         inputPontoB.setFocusable(false);
         inputPontoB.setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            openAutocomplete(REQ_AUTOCOMPLETE_DEST);
+            openAutocomplete(REQ_AUTOCOMPLETE_DEST, null);
         });
 
         inputPontoA.setOnFocusChangeListener((v, hasFocus) -> {
@@ -202,7 +240,20 @@ public class BuscarRotaFragment extends Fragment {
         // Recycler de resultados
         recyclerRotas = view.findViewById(R.id.recycler_rotas);
         recyclerRotas.setLayoutManager(new LinearLayoutManager(requireContext()));
-        routeAdapter = new RouteAdapter(currentRoutes);
+
+        routeAdapter = new RouteAdapter(
+                currentRoutes,
+                route -> {
+                    int count = (route.routePoints != null) ? route.routePoints.size() : 0;
+                    if (count == 0) return;
+
+                    drawRoute(route.routePoints);
+
+                    if (bottomSheetBehavior != null) {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    }
+                }
+        );
         recyclerRotas.setAdapter(routeAdapter);
 
         btnEncontrarRota = view.findViewById(R.id.btn_encontrar_rota);
@@ -217,7 +268,6 @@ public class BuscarRotaFragment extends Fragment {
                 return;
             }
 
-            // Qual modo de transporte foi escolhido?
             int checkedId = chipGroupTransporte.getCheckedChipId();
             String mode = "driving";
             String transitMode = null;
@@ -233,7 +283,7 @@ public class BuscarRotaFragment extends Fragment {
                 modoLabel = "Autocarro";
             } else if (checkedId == R.id.chip_misto) {
                 mode = "transit";
-                transitMode = null; // misto de todos os transportes
+                transitMode = null;
                 modoLabel = "Transportes (misto)";
             } else if (checkedId == R.id.chip_uber) {
                 mode = "driving";
@@ -266,10 +316,8 @@ public class BuscarRotaFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Client do Places (usa o initialize que fizeste na Application)
         placesClient = Places.createClient(requireContext());
 
-        // Activity Result para o PlaceAutocompleteActivity (novo widget)
         autocompleteLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -308,6 +356,12 @@ public class BuscarRotaFragment extends Fragment {
                             Place place = response.getPlace();
                             LatLng latLng = place.getLocation();
 
+                            if (tipoFavoritoAtual != null) {
+                                saveFavourite(place);
+                                tipoFavoritoAtual = null;
+                                return;
+                            }
+
                             String displayText = place.getShortFormattedAddress();
                             if (displayText == null || displayText.isEmpty()) {
                                 displayText = place.getFormattedAddress();
@@ -340,6 +394,333 @@ public class BuscarRotaFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void clearFavourite(FavoriteType type) {
+        String prefix = (type == FavoriteType.HOME) ? "fav_home_" : "fav_work_";
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(prefix + "id");
+        editor.remove(prefix + "name");
+        editor.remove(prefix + "address");
+        editor.remove(prefix + "lat");
+        editor.remove(prefix + "lng");
+        editor.apply();
+    }
+
+    private void deleteExtraFavourite(int index) {
+        int count = prefs.getInt("extra_fav_count", 0);
+        if (index < 0 || index >= count) return;
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        for (int i = index; i < count - 1; i++) {
+            String src = "extra_fav_" + (i + 1) + "_";
+            String dst = "extra_fav_" + i + "_";
+
+            editor.putString(dst + "id", prefs.getString(src + "id", null));
+            editor.putString(dst + "name", prefs.getString(src + "name", null));
+            editor.putString(dst + "address", prefs.getString(src + "address", null));
+            editor.putFloat(dst + "lat", prefs.getFloat(src + "lat", 0f));
+            editor.putFloat(dst + "lng", prefs.getFloat(src + "lng", 0f));
+        }
+
+        String last = "extra_fav_" + (count - 1) + "_";
+        editor.remove(last + "id");
+        editor.remove(last + "name");
+        editor.remove(last + "address");
+        editor.remove(last + "lat");
+        editor.remove(last + "lng");
+
+        editor.putInt("extra_fav_count", count - 1);
+        editor.apply();
+    }
+
+    private void saveFavourite(Place place) {
+        if (tipoFavoritoAtual == null) {
+            destLatLng = place.getLocation();
+            inputPontoB.setText(place.getFormattedAddress());
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            return;
+        }
+
+        if (tipoFavoritoAtual == FavoriteType.HOME || tipoFavoritoAtual == FavoriteType.WORK) {
+            String prefixo = (tipoFavoritoAtual == FavoriteType.HOME) ? "fav_home_" : "fav_work_";
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(prefixo + "id", place.getId());
+            editor.putString(prefixo + "name", place.getDisplayName());
+            editor.putString(prefixo + "address", place.getFormattedAddress());
+
+            if (place.getLocation() != null) {
+                editor.putFloat(prefixo + "lat", (float) place.getLocation().latitude);
+                editor.putFloat(prefixo + "lng", (float) place.getLocation().longitude);
+            }
+
+            editor.apply();
+        } else if (tipoFavoritoAtual == FavoriteType.OTHER) {
+            addExtraFavourite(place);
+        }
+
+        loadFavourites();
+        loadExtraFavourites();
+        Toast.makeText(requireContext(), "Favorito guardado: " + place.getDisplayName(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void addExtraFavourite(Place place) {
+        if (place.getLocation() == null) return;
+
+        int count = prefs.getInt("extra_fav_count", 0);
+        String baseKey = "extra_fav_" + count + "_";
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(baseKey + "id", place.getId());
+        editor.putString(baseKey + "name", place.getDisplayName());
+        editor.putString(baseKey + "address", place.getShortFormattedAddress());
+        editor.putFloat(baseKey + "lat", (float) place.getLocation().latitude);
+        editor.putFloat(baseKey + "lng", (float) place.getLocation().longitude);
+        editor.putInt("extra_fav_count", count + 1);
+        editor.apply();
+    }
+
+    private void loadExtraFavourites() {
+        int count = prefs.getInt("extra_fav_count", 0);
+
+        int indexPlus = containerFavoritos.indexOfChild(btnAdicionarFavorito);
+
+        for (int i = indexPlus - 1; i >= 0; i--) {
+            View child = containerFavoritos.getChildAt(i);
+            if (child != favoritoCasa && child != favoritoTrabalho) {
+                containerFavoritos.removeViewAt(i);
+            } else {
+                break;
+            }
+        }
+
+        if (count == 0) {
+            return;
+        }
+
+        indexPlus = containerFavoritos.indexOfChild(btnAdicionarFavorito);
+
+        for (int i = 0; i < count; i++) {
+            String baseKey = "extra_fav_" + i + "_";
+            String name = prefs.getString(baseKey + "name", null);
+            String address = prefs.getString(baseKey + "address", null);
+            float lat = prefs.getFloat(baseKey + "lat", 0f);
+            float lng = prefs.getFloat(baseKey + "lng", 0f);
+
+            if (name == null) continue;
+
+            View favView = createViewExtraFavourites(i, name, address, lat, lng);
+            containerFavoritos.addView(favView, indexPlus);
+            indexPlus++;
+        }
+    }
+
+    private View createViewExtraFavourites(int index, String name, String address, float lat, float lng) {
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER);
+        layout.setPadding(0, 0, dpToPx(20), dpToPx(20));
+
+        MaterialCardView card = new MaterialCardView(requireContext());
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dpToPx(64), dpToPx(64));
+        card.setLayoutParams(cardParams);
+        card.setRadius(dpToPx(36));
+        card.setCardElevation(dpToPx(2));
+        card.setStrokeWidth(dpToPx(1));
+        card.setStrokeColor(Color.parseColor("#E2E8F0"));
+        card.setCardBackgroundColor(Color.parseColor("#F8FAFC"));
+
+        ImageView icon = new ImageView(requireContext());
+        FrameLayout.LayoutParams iconParams =
+                new FrameLayout.LayoutParams(dpToPx(52), dpToPx(52), Gravity.CENTER);
+        icon.setLayoutParams(iconParams);
+        icon.setImageResource(R.drawable.ic_star);
+        icon.setColorFilter(Color.parseColor("#F97316"));
+
+        card.addView(icon);
+
+        TextView titulo = new TextView(requireContext());
+        titulo.setText(name);
+        titulo.setTextSize(12);
+        titulo.setTextColor(Color.parseColor("#475569"));
+        titulo.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        titulo.setGravity(Gravity.CENTER_HORIZONTAL);
+        titulo.setMaxLines(1);
+        titulo.setEllipsize(TextUtils.TruncateAt.END);
+
+        LinearLayout.LayoutParams tituloParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+        tituloParams.topMargin = dpToPx(8);
+        titulo.setLayoutParams(tituloParams);
+
+        TextView subtitulo = new TextView(requireContext());
+        subtitulo.setTextSize(10);
+        subtitulo.setTextColor(Color.parseColor("#64748B"));
+        subtitulo.setGravity(Gravity.CENTER_HORIZONTAL);
+        subtitulo.setMaxLines(1);
+        subtitulo.setEllipsize(TextUtils.TruncateAt.END);
+
+        LinearLayout.LayoutParams subtituloParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+        subtituloParams.topMargin = dpToPx(2);
+        subtitulo.setLayoutParams(subtituloParams);
+
+        layout.addView(card);
+        layout.addView(titulo);
+        layout.addView(subtitulo);
+
+        LatLng latLng = new LatLng(lat, lng);
+
+        layout.setOnClickListener(v ->
+                useLatLngAsDestination(latLng, name)
+        );
+
+        layout.setTag(index);
+
+        layout.setOnLongClickListener(v -> {
+            Object tag = v.getTag();
+            if (!(tag instanceof Integer)) return true;
+
+            int idx = (Integer) tag;
+
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Remover favorito?")
+                    .setMessage(name)
+                    .setPositiveButton("Remover", (dialog, which) -> {
+                        deleteExtraFavourite(idx);
+                        loadExtraFavourites();
+                        Toast.makeText(requireContext(), "Favorito removido", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+
+            return true;
+        });
+
+        return layout;
+    }
+
+    private int dpToPx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
+    }
+
+    private void loadFavourites() {
+        String homeName = prefs.getString("fav_home_name", null);
+        String homeAddress = prefs.getString("fav_home_address", null);
+
+        if (homeName != null) {
+            textSubtituloCasa.setText(""); // ou homeAddress / homeName se quiseres mostrar
+            textSubtituloCasa.setTextColor(Color.parseColor("#475569"));
+        } else {
+            textSubtituloCasa.setText("Adicionar");
+            textSubtituloCasa.setTextColor(Color.parseColor("#3B82F6"));
+        }
+
+        String workName = prefs.getString("fav_work_name", null);
+        String workAddress = prefs.getString("fav_work_address", null);
+
+        if (workName != null) {
+            textSubtituloTrabalho.setText("");
+            textSubtituloTrabalho.setTextColor(Color.parseColor("#475569"));
+        } else {
+            textSubtituloTrabalho.setText("Adicionar");
+            textSubtituloTrabalho.setTextColor(Color.parseColor("#3B82F6"));
+        }
+    }
+
+    private boolean existsFavourite(FavoriteType type) {
+        String prefix = (type == FavoriteType.HOME) ? "fav_home_" : "fav_work_";
+        return prefs.getString(prefix + "name", null) != null;
+    }
+
+    private void useFavourite(FavoriteType tipo) {
+        String prefixo = (tipo == FavoriteType.HOME) ? "fav_home_" : "fav_work_";
+
+        String name = prefs.getString(prefixo + "name", null);
+        String address = prefs.getString(prefixo + "address", null);
+        float lat = prefs.getFloat(prefixo + "lat", 0f);
+        float lng = prefs.getFloat(prefixo + "lng", 0f);
+
+        if (name == null || address == null) {
+            Toast.makeText(requireContext(), "Favorito não definido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        LatLng latLng = new LatLng(lat, lng);
+
+        useLatLngAsDestination(latLng, name);
+    }
+
+    private void useLatLngAsDestination(LatLng latLng, String name) {
+        destLatLng = latLng;
+        inputPontoB.setText(name);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private void setUpFavouriteClicks() {
+
+        favoritoCasa.setOnClickListener(v -> {
+            if (existsFavourite(FavoriteType.HOME)) {
+                useFavourite(FavoriteType.HOME);
+            } else {
+                openAutocomplete(REQ_AUTOCOMPLETE_DEST, FavoriteType.HOME);
+            }
+        });
+
+        favoritoCasa.setOnLongClickListener(v -> {
+            if (!existsFavourite(FavoriteType.HOME)) return true;
+
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Remover Casa?")
+                    .setMessage("Queres apagar o favorito Casa?")
+                    .setPositiveButton("Remover", (dialog, which) -> {
+                        clearFavourite(FavoriteType.HOME);
+                        loadFavourites();
+                        Toast.makeText(requireContext(), "Casa removida dos favoritos", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+
+            return true;
+        });
+
+        favoritoTrabalho.setOnLongClickListener(v -> {
+            if (!existsFavourite(FavoriteType.WORK)) return true;
+
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Remover Trabalho?")
+                    .setMessage("Queres apagar o favorito Trabalho?")
+                    .setPositiveButton("Remover", (dialog, which) -> {
+                        clearFavourite(FavoriteType.WORK);
+                        loadFavourites();
+                        Toast.makeText(requireContext(), "Trabalho removido dos favoritos", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+
+            return true;
+        });
+
+        favoritoTrabalho.setOnClickListener(v -> {
+            if (existsFavourite(FavoriteType.WORK)) {
+                useFavourite(FavoriteType.WORK);
+            } else {
+                openAutocomplete(REQ_AUTOCOMPLETE_DEST, FavoriteType.WORK);
+            }
+        });
+
+        btnAdicionarFavorito.setOnClickListener(v -> {
+            openAutocomplete(REQ_AUTOCOMPLETE_DEST, FavoriteType.OTHER);
+        });
     }
 
     private void initMap() {
@@ -383,10 +764,8 @@ public class BuscarRotaFragment extends Fragment {
                         return;
                     }
 
-                    // Desenha só a primeira rota no mapa
                     drawRoute(routes.get(0).routePoints);
 
-                    // Atualiza lista de resultados
                     currentRoutes.clear();
                     currentRoutes.addAll(routes);
                     routeAdapter.notifyDataSetChanged();
@@ -505,6 +884,8 @@ public class BuscarRotaFragment extends Fragment {
                 .append("&mode=").append(mode)
                 .append("&alternatives=true");
 
+        params.append("&language=pt-PT");
+
         if ("transit".equals(mode) && transitMode != null) {
             params.append("&transit_mode=").append(transitMode);
         }
@@ -539,7 +920,8 @@ public class BuscarRotaFragment extends Fragment {
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
     }
 
-    private void openAutocomplete(int requestCode) {
+    private void openAutocomplete(int requestCode, @Nullable FavoriteType type) {
+        tipoFavoritoAtual = type;
         isSelectingOrigin = (requestCode == REQ_AUTOCOMPLETE_ORIGIN);
 
         PlaceAutocomplete.IntentBuilder builder = new PlaceAutocomplete.IntentBuilder();
@@ -580,130 +962,18 @@ public class BuscarRotaFragment extends Fragment {
         }
     }
 
-    // ========= MODELO + ADAPTER PARA A RECYCLER ========= //
+    // ========= MODELO PARA A RECYCLER ========= //
 
-    private static class RouteInfo {
-        String summary;
-        String durationText;
-        String arrivalTimeText;
-        String departureTimeText;
-        List<String> itineraryLines = new ArrayList<>();
-        List<LatLng> routePoints = new ArrayList<>();
+    public static class RouteInfo {
+        public String summary;
+        public String durationText;
+        public String arrivalTimeText;
+        public String departureTimeText;
+        public List<String> itineraryLines = new ArrayList<>();
+        public List<LatLng> routePoints = new ArrayList<>();
 
-        boolean hasTransit = false;
-        String primaryVehicleType = null;
-    }
-
-    private static class RouteViewHolder extends RecyclerView.ViewHolder {
-        MaterialCardView card;
-        ImageView ivMode;
-        TextView tvTitulo;
-        TextView tvTempo;
-        TextView tvItinerario;
-
-        RouteViewHolder(@NonNull View itemView) {
-            super(itemView);
-            card = (MaterialCardView) itemView;
-            ivMode = itemView.findViewById(R.id.iv_mode);
-            tvTitulo = itemView.findViewById(R.id.tv_titulo);
-            tvTempo = itemView.findViewById(R.id.tv_tempo);
-            tvItinerario = itemView.findViewById(R.id.tv_itinerario);
-        }
-    }
-
-    // 🔹 AGORA NÃO É STATIC → consegue chamar drawRoute e usar bottomSheetBehavior
-    private class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
-
-        private final List<RouteInfo> routes;
-
-        RouteAdapter(List<RouteInfo> routes) {
-            this.routes = routes;
-        }
-
-        @NonNull
-        @Override
-        public RouteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_rota, parent, false);
-            return new RouteViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RouteViewHolder holder, int position) {
-            RouteInfo r = routes.get(position);
-
-            StringBuilder titulo = new StringBuilder();
-            if (r.summary != null && !r.summary.isEmpty()) {
-                titulo.append(r.summary);
-            } else {
-                titulo.append("Rota ").append(position + 1);
-            }
-            if (r.durationText != null && !r.durationText.isEmpty()) {
-                titulo.append(" • ").append(r.durationText);
-            }
-            holder.tvTitulo.setText(titulo.toString());
-
-            StringBuilder tempo = new StringBuilder();
-            if (r.departureTimeText != null && !r.departureTimeText.isEmpty()) {
-                tempo.append("Partida ").append(r.departureTimeText);
-            }
-            if (r.arrivalTimeText != null && !r.arrivalTimeText.isEmpty()) {
-                if (tempo.length() > 0) tempo.append(" • ");
-                tempo.append("Chegada ").append(r.arrivalTimeText);
-            }
-            holder.tvTempo.setText(tempo.toString());
-
-            if (!r.itineraryLines.isEmpty()) {
-                StringBuilder sub = new StringBuilder();
-                for (int i = 0; i < r.itineraryLines.size() && i < 3; i++) {
-                    if (i > 0) sub.append("\n");
-                    sub.append("• ").append(r.itineraryLines.get(i));
-                }
-                holder.tvItinerario.setText(sub.toString());
-            } else {
-                holder.tvItinerario.setText("Itinerário detalhado indisponível.");
-            }
-
-            int iconRes;
-
-            if (r.hasTransit) {
-                String type = r.primaryVehicleType != null ? r.primaryVehicleType : "";
-                if (type.contains("BUS")) {
-                    iconRes = R.drawable.ic_bus;
-                } else if (type.contains("RAIL") || type.contains("TRAIN")) {
-                    iconRes = R.drawable.ic_train;
-                } else if (type.contains("SUBWAY") || type.contains("METRO")) {
-                    iconRes = R.drawable.ic_bus;
-                } else if (type.contains("TRAM")) {
-                    iconRes = R.drawable.ic_bus;
-                } else {
-                    iconRes = R.drawable.ic_navigation;
-                }
-            } else {
-                iconRes = R.drawable.ic_car;
-            }
-
-            holder.ivMode.setImageResource(iconRes);
-
-            holder.card.setOnClickListener(v -> {
-                int count = (r.routePoints != null) ? r.routePoints.size() : 0;
-
-                if (count == 0) {
-                    return;
-                }
-
-                drawRoute(r.routePoints);
-
-                if (bottomSheetBehavior != null) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return routes.size();
-        }
+        public boolean hasTransit = false;
+        public String primaryVehicleType = null;
     }
 
     private void toggleFabMenu() {
@@ -715,12 +985,10 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     private void openFabMenu() {
-        // Torna os FABs visíveis
         fab1.setVisibility(View.VISIBLE);
         fab2.setVisibility(View.VISIBLE);
         fab3.setVisibility(View.VISIBLE);
 
-        // Estado inicial: escondidos abaixo
         fab1.setAlpha(0f);
         fab2.setAlpha(0f);
         fab3.setAlpha(0f);
@@ -729,7 +997,6 @@ public class BuscarRotaFragment extends Fragment {
         fab2.setTranslationY(100f);
         fab3.setTranslationY(100f);
 
-        // Animação para cima (translationY = 0 vai para a posição definida no XML)
         fab1.animate()
                 .translationY(0)
                 .alpha(1)
@@ -755,7 +1022,6 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     private void closeFabMenu() {
-        // Animação para baixo
         fab1.animate()
                 .translationY(100f)
                 .alpha(0)
