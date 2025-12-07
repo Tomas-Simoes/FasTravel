@@ -563,10 +563,9 @@
                             app:checkedIconVisible="false" />
                     </com.google.android.material.chip.ChipGroup>
 
-                    <!-- Botão principal com gradiente -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_encontrar_rota"
-                        style="@style/Widget.Material3.Button"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:text="Find Routes"
@@ -574,10 +573,20 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="@null"
                         android:background="@drawable/button_gradient_primary"
-                        app:cornerRadius="28dp"
+                        app:cornerRadius="16dp"
+                        app:iconGravity="textStart"
+                        app:icon="@drawable/ic_search"
+                        app:iconTint="#FFFFFF"
+                        app:iconSize="20dp"
+                        app:iconPadding="8dp"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
                         android:layout_marginBottom="24dp"
-                        android:elevation="4dp" />
+                        android:elevation="6dp"
+                        android:stateListAnimator="@null" />
 
                     <!-- Resultados -->
                     <TextView
