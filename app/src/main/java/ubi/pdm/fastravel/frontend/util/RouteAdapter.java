@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend.ui.fragments;
+package ubi.pdm.fastravel.frontend.util;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +14,7 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.ui.fragments.BuscarRotaFragment;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHolder> {
 

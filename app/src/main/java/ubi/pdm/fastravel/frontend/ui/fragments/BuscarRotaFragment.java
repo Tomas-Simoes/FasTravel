@@ -53,6 +53,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.maps.android.PolyUtil;
@@ -75,10 +76,15 @@ import java.util.Collections;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+<<<<<<< Updated upstream
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.PerfilActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
+=======
+import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
+import ubi.pdm.fastravel.frontend.util.RouteAdapter;
+>>>>>>> Stashed changes
 
 public class BuscarRotaFragment extends Fragment {
 
@@ -245,7 +251,7 @@ public class BuscarRotaFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buscar_rota, container, false);
 
-        apiKey = getString(R.string.google_maps_key);
+        apiKey = view.getContext().getString(R.string.google_maps_key);
 
         // Bottom Sheet setup
         MaterialCardView bottomSheet = view.findViewById(R.id.bottom_sheet);
@@ -371,6 +377,8 @@ public class BuscarRotaFragment extends Fragment {
 
                     bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
+                   // showTurnByTurnDirections(route);
+
                     if (bottomSheetBehavior != null) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     }
@@ -430,6 +438,7 @@ public class BuscarRotaFragment extends Fragment {
             bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
             //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED); houve um conflito no commit e não sei qual dos dois é o certo
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
 
         return view;
@@ -788,6 +797,29 @@ public class BuscarRotaFragment extends Fragment {
         LatLng latLng = new LatLng(lat, lng);
 
         useLatLngAsDestination(latLng, name);
+    }
+
+    private void showTurnByTurnDirections(RouteInfo route) {
+        if (route.itineraryLines == null || route.itineraryLines.isEmpty()) {
+            Toast.makeText(requireContext(),
+                    "Sem instruções detalhadas para esta rota",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < route.itineraryLines.size(); i++) {
+            sb.append(i + 1)
+                    .append(") ")
+                    .append(route.itineraryLines.get(i))
+                    .append("\n\n");
+        }
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Direções passo a passo")
+                .setMessage(sb.toString().trim())
+                .setPositiveButton("OK", null)
+                .show();
     }
 
     private void useLatLngAsDestination(LatLng latLng, String name) {
