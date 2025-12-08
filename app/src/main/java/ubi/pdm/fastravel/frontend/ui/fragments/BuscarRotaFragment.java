@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.location.LocationRequest;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -35,7 +36,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
@@ -81,8 +81,11 @@ import java.util.Collections;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
+import ubi.pdm.fastravel.frontend.ui.activities.PerfilActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
 import ubi.pdm.fastravel.frontend.util.RouteAdapter;
 
@@ -112,13 +115,14 @@ public class BuscarRotaFragment extends Fragment {
 
     private MaterialCardView fabMain, cardNavigation;
 
-    private FloatingActionButton fab1, fabHistory, fab3, fabThemedRoutes;
+    private FloatingActionButton fabPerfil, fabHistory, fab3, fabThemedRoutes;
+    private TextView tvIniciais;
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
 
     private LinearLayout favoritoCasa, favoritoTrabalho, btnAdicionarFavorito, containerFavoritos;
 
-    private TextView textSubtituloCasa, textSubtituloTrabalho, tvNavInstruction, tvNavDetail, tvNavDistance, tvIniciais;
+    private TextView textSubtituloCasa, textSubtituloTrabalho, tvNavInstruction, tvNavDetail, tvNavDistance;
 
     private MaterialCardView bottomSheet;
 
@@ -248,6 +252,9 @@ public class BuscarRotaFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buscar_rota, container, false);
 
+        UserRepository userRepository = new UserRepository(requireContext());
+        UserData userData = userRepository.getUserFromCacheOrApi();
+
         apiKey = view.getContext().getString(R.string.google_maps_key);
 
         setupIds(view);
@@ -259,7 +266,16 @@ public class BuscarRotaFragment extends Fragment {
         loadFavourites();
         loadExtraFavourites();
 
-        tvIniciais.setText("JD");
+
+
+        String[] parts = userData.name.trim().split("\\s+");
+        StringBuilder initials = new StringBuilder();
+
+        for (String part : parts) {
+            initials.append(Character.toUpperCase(part.charAt(0)));
+        }
+
+        tvIniciais.setText(initials.toString());
 
         setupFabClicks();
 
@@ -270,7 +286,7 @@ public class BuscarRotaFragment extends Fragment {
         routeAdapter = new RouteAdapter(
                 currentRoutes,
                 route -> {
-                    int count = (route.routePoints != null) ? route.routePoints.size() : 0;
+                    int count = (route.routePoints != null) ? route.routePoints.size() : 10;
                     if (count == 0) return;
 
                     drawRoute(route.routePoints);
@@ -285,7 +301,7 @@ public class BuscarRotaFragment extends Fragment {
                 }
         );
         recyclerRotas.setAdapter(routeAdapter);
-        
+
         setupFindRoutes(view);
 
         return view;
@@ -604,7 +620,7 @@ public class BuscarRotaFragment extends Fragment {
         String homeAddress = prefs.getString("fav_home_address", null);
 
         if (homeName != null) {
-            textSubtituloCasa.setText("");
+            textSubtituloCasa.setText(""); // ou homeAddress / homeName se quiseres mostrar
             textSubtituloCasa.setTextColor(Color.parseColor("#475569"));
         } else {
             textSubtituloCasa.setText("Adicionar");
@@ -1037,16 +1053,16 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     private void openFabMenu() {
-        fab1.setVisibility(View.VISIBLE);
+        fabPerfil.setVisibility(View.VISIBLE);
         fabHistory.setVisibility(View.VISIBLE);
         fab3.setVisibility(View.VISIBLE);
         fabThemedRoutes.setVisibility(View.VISIBLE);
 
 
-        fab1.setAlpha(0f); fabHistory.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
-        fab1.setTranslationY(100f); fabHistory.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
+        fabPerfil.setAlpha(0f); fabHistory.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
+        fabPerfil.setTranslationY(100f); fabHistory.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
 
-        fab1.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
+        fabPerfil.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
         fabHistory.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
         fab3.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(100).start();
         fabThemedRoutes.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(150).start();
@@ -1056,7 +1072,7 @@ public class BuscarRotaFragment extends Fragment {
 
     private void closeFabMenu() {
 
-        fab1.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab1.setVisibility(View.GONE)).start();
+        fabPerfil.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabPerfil.setVisibility(View.GONE)).start();
         fabHistory.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabHistory.setVisibility(View.GONE)).start();
         fab3.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab3.setVisibility(View.GONE)).start();
         fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
@@ -1226,7 +1242,6 @@ public class BuscarRotaFragment extends Fragment {
         }
 
         fused.requestLocationUpdates(request, navLocationCallback, requireActivity().getMainLooper());
-
     }
 
     private void setupIds(View view) {
@@ -1239,7 +1254,7 @@ public class BuscarRotaFragment extends Fragment {
 
         menuFabContainer = view.findViewById(R.id.menu_fab_container);
         fabMain = view.findViewById(R.id.fab_main);
-        fab1 = view.findViewById(R.id.fab_1);
+        fabPerfil = view.findViewById(R.id.fab_1);
         fabHistory = view.findViewById(R.id.fab_2);
         fab3 = view.findViewById(R.id.fab_3);
         fabThemedRoutes = view.findViewById(R.id.fab_themed_routes);
@@ -1362,11 +1377,11 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     private void setupFabClicks() {
-
         fabMain.setOnClickListener(v -> toggleFabMenu());
 
-        fab1.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Perfil", Toast.LENGTH_SHORT).show();
+        fabPerfil.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), PerfilActivity.class);
+            startActivity(intent);
             closeFabMenu();
         });
 
@@ -1386,6 +1401,7 @@ public class BuscarRotaFragment extends Fragment {
             themedRouteLauncher.launch(intent);
             closeFabMenu();
         });
+
 
     }
 

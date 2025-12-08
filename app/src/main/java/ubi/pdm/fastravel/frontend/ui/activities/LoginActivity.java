@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend.ui.activities; // É uma boa prática mover para um pacote 'activities'
+package ubi.pdm.fastravel.frontend.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity; // Mudar de Fragment para AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -74,7 +74,10 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (user != null) {
                         Toast.makeText(this, "Bem-vindo " + user.name, Toast.LENGTH_SHORT).show();
-                        navigateToBuscarRotaActivity();
+                        // Retorna RESULT_OK para o MainActivity
+                        Intent data = new Intent();
+                        setResult(RESULT_OK, data);
+                        finish(); // fecha LoginActivity
                     } else {
                         Toast.makeText(this, "Credenciais inválidas.", Toast.LENGTH_SHORT).show();
                     }
@@ -82,14 +85,14 @@ public class LoginActivity extends AppCompatActivity {
             }).start();
         });
 
-
         btnGoogle.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
         });
 
         textIrRegisto.setOnClickListener(v -> {
-            navigateToRegisterActivity();
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -99,24 +102,14 @@ public class LoginActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Bem-vindo " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
 
-            navigateToBuscarRotaActivity();
+            // Retorna RESULT_OK para MainActivity
+            Intent data = new Intent();
+            setResult(RESULT_OK, data);
+            finish(); // fecha LoginActivity
 
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(this, "Erro no login Google.", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void navigateToBuscarRotaActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class); // Altere para a sua Activity principal
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpa o back stack
-        startActivity(intent);
-        finish(); // Termina LoginActivity para que o utilizador não possa voltar
-    }
-
-    private void navigateToRegisterActivity() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class); // Altere para o nome da sua Activity de Registo
-        startActivity(intent);
     }
 }

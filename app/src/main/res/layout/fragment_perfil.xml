@@ -4,47 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F5F5F5">
+    android:background="@color/background_color">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meu Perfil"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"
-            android:textColor="@android:color/black" />
-
-        <com.google.android.material.card.MaterialCardView
+        <!-- Header com Gradiente -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@android:color/white">
+            android:layout_height="200dp"
+            android:background="@drawable/gradient_header"
+            android:padding="24dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp"
+                android:layout_centerInParent="true"
                 android:gravity="center">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/image_perfil_usuario"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:src="@drawable/ic_person"
-                    android:padding="20dp"
-                    android:background="#4285F4"
-                    app:tint="@android:color/white"
-                    android:layout_marginBottom="16dp" />
+                <!-- Círculo com Iniciais -->
+                <TextView
+                    android:id="@+id/text_iniciais_usuario"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:text="JS"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/circle_white"
+                    android:textColor="@color/primary_blue"
+                    android:elevation="4dp" />
 
                 <TextView
                     android:id="@+id/text_nome_usuario"
@@ -53,82 +45,316 @@
                     android:text="João Silva"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Portugal"
-                    android:textSize="16sp"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#757575" />
-
-                <TextView
-                    android:id="@+id/text_email_usuario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="joao.silva@email.com"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="#616161" />
+                    android:layout_marginTop="12dp"
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_editar_perfil"
+        <!-- Conteúdo Principal -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Editar Perfil"
-            android:layout_marginBottom="8dp"
-            app:icon="@android:drawable/ic_menu_edit"
-            app:iconGravity="textStart"
-            android:textColor="@android:color/black"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:gravity="start|center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="-10dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_notificacoes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Notificações"
-            android:layout_marginBottom="8dp"
-            app:icon="@android:drawable/ic_popup_reminder"
-            app:iconGravity="textStart"
-            android:textColor="@android:color/black"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:gravity="start|center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
+            <!-- Seção Preferências -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PREFERÊNCIAS"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/text_secondary" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sobre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sobre o FasTravel"
-            android:layout_marginBottom="8dp"
-            app:icon="@android:drawable/ic_menu_info_details"
-            app:iconGravity="textStart"
-            android:textColor="@android:color/black"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:gravity="start|center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
+            <!-- Modo Escuro -->
+            <LinearLayout
+                android:id="@+id/layout_dark_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sair"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sair da Conta"
-            android:layout_marginTop="24dp"
-            app:icon="@drawable/ic_logout"
-            app:iconGravity="textStart"
-            app:backgroundTint="#E57373"
-            android:textColor="@android:color/white"
-            app:cornerRadius="8dp" />
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_blue_light"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_dark_mode"
+                        app:tint="@color/primary_blue" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Modo Escuro"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aparência escura para economizar bateria"
+                        android:textSize="13sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_dark_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/switch_thumb"
+                    app:trackTint="@color/switch_track" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="0dp" />
+
+            <!-- Notificações -->
+            <LinearLayout
+                android:id="@+id/layout_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_blue_light"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_notifications"
+                        app:tint="@color/primary_blue" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notificações"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Receber alertas e atualizações"
+                        android:textSize="13sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/switch_thumb"
+                    app:trackTint="@color/switch_track" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="0dp" />
+
+            <!-- Preferência de Rotas CO2 -->
+            <LinearLayout
+                android:id="@+id/layout_co2_preference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_green_light"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_eco"
+                        app:tint="@color/soft_green" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Priorizar Rotas Ecológicas"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sugerir rotas com menor emissão de CO₂"
+                        android:textSize="13sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_co2_routes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/switch_thumb"
+                    app:trackTint="@color/switch_track" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Seção Informações -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INFORMAÇÕES"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/text_secondary" />
+
+            <!-- Sobre -->
+            <LinearLayout
+                android:id="@+id/btn_sobre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/circle_blue_light"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/primary_blue" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sobre o FasTravel"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/text_primary" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_right"
+                    app:tint="@color/text_tertiary" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                android:layout_marginBottom="32dp" />
+
+            <!-- Botão Sair -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_sair"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Sair da Conta"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_logout"
+                app:iconGravity="textStart"
+                app:iconTint="@android:color/white"
+                app:backgroundTint="#EF5350"
+                android:textColor="@android:color/white"
+                app:cornerRadius="12dp"
+                android:elevation="2dp" />
+
+            <!-- Versão -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FasTravel v1.0.2"
+                android:textSize="12sp"
+                android:layout_marginTop="24dp"
+                android:layout_gravity="center"
+                android:textColor="@color/text_tertiary" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

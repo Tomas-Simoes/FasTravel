@@ -1,6 +1,10 @@
 package ubi.pdm.fastravel.frontend.DataPersistenceModule.User;
 
 import android.content.Context;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import ubi.pdm.fastravel.frontend.APIModule.ApiService;
 import ubi.pdm.fastravel.frontend.APIModule.RequestResponse.LoginResponse;
@@ -12,6 +16,9 @@ public class UserRepository {
     private final CacheManager cache;
     private final ApiService apiService;
 
+    // Variável para guardar a última mensagem de erro do servidor
+    private String lastErrorMessage;
+
     public UserRepository(Context context) {
         this.cache = new CacheManager(context);
         this.apiService = new ApiService(context);
@@ -20,11 +27,26 @@ public class UserRepository {
     public UserData registerUser(String name, String email, String password) {
         try {
             LoginResponse response = apiService.register(name, email, password);
+            lastErrorMessage = null;
             return response.user;
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // ou lançar RuntimeException
+            String message = e.getMessage();
+            Log.d("aaaa", e.toString());
+            try {
+                JSONObject json = new JSONObject(message);
+                JSONArray errors = json.optJSONArray("errors");
+                lastErrorMessage = (errors != null && errors.length() > 0) ? errors.getString(0) : "Erro desconhecido";
+            } catch (Exception jsonEx) {
+                lastErrorMessage = "Erro desconhecido";
+            }
+            return null;
         }
+
+    }
+
+    public String getLastErrorMessage() {
+        return lastErrorMessage;
     }
 
     public UserData loginAndGetUser(String email, String password) {
@@ -33,7 +55,7 @@ public class UserRepository {
             return response.user;
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // ou lançar runtime exception
+            return null;
         }
     }
 

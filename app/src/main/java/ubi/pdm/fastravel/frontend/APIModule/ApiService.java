@@ -1,6 +1,9 @@
 package ubi.pdm.fastravel.frontend.APIModule;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import ubi.pdm.fastravel.frontend.APIModule.RequestResponse.LoginRequest;
@@ -40,16 +43,19 @@ public class ApiService {
     }
 
     public LoginResponse register(String name, String email, String password) throws Exception {
-        Call<LoginResponse> call = api.register(new RegisterRequest(name, email, password));
+        RegisterRequest req = new RegisterRequest(name, email, password);
+        Call<LoginResponse> call = api.register(req);
+        Log.d("REGISTER_JSON", new Gson().toJson(req));
+
         retrofit2.Response<LoginResponse> response = call.execute();
 
         if (!response.isSuccessful() || response.body() == null) {
-            throw new Exception("Registo falhou: " + response.code());
+            String errorBody = (response.errorBody() != null) ? response.errorBody().string() : "Erro desconhecido";
+            throw new Exception(errorBody);
         }
 
         LoginResponse registerData = response.body();
 
-        // Guardar JWT e user na cache
         cache.saveToCache(TOKEN_KEY, registerData.token);
         cache.saveToCache("user_data", registerData.user);
 

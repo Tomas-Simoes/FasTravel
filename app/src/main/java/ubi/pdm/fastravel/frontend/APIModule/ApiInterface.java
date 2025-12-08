@@ -12,7 +12,7 @@ import ubi.pdm.fastravel.frontend.APIModule.RequestResponse.RegisterRequest;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
 
 public interface ApiInterface {
-    @POST("/register")
+    @POST("/users")
     Call<LoginResponse> register(@Body RegisterRequest request);
     @POST("/login")
     Call<LoginResponse> login(@Body LoginRequest request);

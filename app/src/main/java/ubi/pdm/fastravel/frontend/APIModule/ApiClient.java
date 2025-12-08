@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static String BACKEND_URL = "https://fastravel-production.up.railway.app:8080/";
+    private static String BACKEND_URL = "https://fastravel-production.up.railway.app";
     private static ApiInterface instance;
 
     public static ApiInterface getInstance() {

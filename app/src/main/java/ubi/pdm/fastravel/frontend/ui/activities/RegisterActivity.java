@@ -78,11 +78,11 @@ public class RegisterActivity extends AppCompatActivity { // 1. Mudar de Fragmen
 
                 runOnUiThread(() -> {
                     if (user != null) {
-                        Toast.makeText(this, "Bem-vindo " + user.name, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Welcome " + user.name, Toast.LENGTH_SHORT).show();
                         navigateToNextActivity();
                     } else {
-                        Toast.makeText(this, "Falha no registo.", Toast.LENGTH_SHORT).show();
-                    }
+                        String errorMessage = repo.getLastErrorMessage(); // Implementa isto para guardar o erro do servidor
+                        Toast.makeText(this, "Register failed: " + errorMessage, Toast.LENGTH_SHORT).show();                    }
                 });
             }).start();
         });
@@ -125,12 +125,12 @@ public class RegisterActivity extends AppCompatActivity { // 1. Mudar de Fragmen
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            // Login Google com sucesso
-            Toast.makeText(this, "Bem-vindo " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
 
-            // Navegar para a próxima Activity após login/registo via Google
-            navigateToNextActivity();
-
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpa o back stack
+            startActivity(intent);
+            finish();
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(this, "Erro no login Google", Toast.LENGTH_SHORT).show();
@@ -147,10 +147,6 @@ public class RegisterActivity extends AppCompatActivity { // 1. Mudar de Fragmen
     }
 
     private void navigateToNextActivity() {
-        // ASSUNÇÃO: A próxima Activity é a Activity Principal (e.g., MainActivity)
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpa o back stack
-        startActivity(intent);
-        finish();
+
     }
 }
