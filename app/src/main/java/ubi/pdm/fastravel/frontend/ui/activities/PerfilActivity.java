@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -22,6 +23,7 @@ public class PerfilActivity extends AppCompatActivity {
     private LinearLayout btnSobre;
     private MaterialButton btnSair;
     private SwitchMaterial switchDarkMode;
+    private SwitchMaterial switchNotifications;
     private SwitchMaterial switchCo2Routes;
     private TextView textIniciaisUsuario;
     private TextView textNomeUsuario;
@@ -81,17 +83,15 @@ public class PerfilActivity extends AppCompatActivity {
         btnSair.setOnClickListener(v -> {
             Toast.makeText(this, "Saindo da conta...", Toast.LENGTH_SHORT).show();
             // Aqui podes adicionar a lógica de logout
+            // Por exemplo: Firebase.auth.signOut();
             // finish();
         });
 
-        // Switch Modo Escuro
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 Toast.makeText(this, "Modo Escuro Ativado 🌙", Toast.LENGTH_SHORT).show();
-                // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 Toast.makeText(this, "Modo Escuro Desativado", Toast.LENGTH_SHORT).show();
-                // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
 
@@ -102,7 +102,6 @@ public class PerfilActivity extends AppCompatActivity {
                 // Salvar preferência
             } else {
                 Toast.makeText(this, "Rotas Ecológicas Desativadas", Toast.LENGTH_SHORT).show();
-                // Salvar preferência
             }
         });
     }
