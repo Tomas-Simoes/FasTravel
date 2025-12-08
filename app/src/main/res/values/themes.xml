@@ -1,16 +1,100 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FasTravel" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- TEMA PRINCIPAL DA APP (DayNight) -->
+    <style name="Theme.FasTravel" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Cores principais -->
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryVariant">#2563EB</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/primary_emerald</item>
+        <item name="colorSecondaryVariant">#059669</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Backgrounds / texto -->
+        <item name="android:colorBackground">@color/background_white</item>
+        <item name="colorSurface">@color/background_light</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+
+        <item name="colorOutline">@color/divider_color</item>
+
+        <!-- Status / nav bar (modo claro, o night override faz-se em values-night) -->
+        <item name="android:statusBarColor">@color/background_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:navigationBarColor">@color/background_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <item name="android:windowBackground">@color/background_white</item>
+
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+
+        <!-- Widgets da app -->
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
+        <item name="chipStyle">@style/Widget.App.Chip</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
     </style>
 
+    <!-- SPLASH THEME -->
     <style name="Theme.FasTravel.Splash" parent="Theme.SplashScreen">
-
         <item name="windowSplashScreenAnimatedIcon">@mipmap/logo_fastravel</item>
-        <item name="windowSplashScreenBackground">@color/white</item>
+        <!-- Podes trocar para @color/background_white ou @color/background_color -->
+        <item name="windowSplashScreenBackground">@color/background_white</item>
 
+        <!-- Depois do splash, qual é o tema da app? -->
+        <item name="postSplashScreenTheme">@style/Theme.FasTravel</item>
     </style>
 
-    <style name="Theme.FasTravel" parent="Base.Theme.FasTravel" />
+    <!-- Widgets / componentes reutilizáveis -->
+
+    <style name="Widget.App.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/background_white</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">16dp</item>
+    </style>
+
+    <style name="Widget.App.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_background</item>
+        <item name="chipStrokeColor">@color/chip_stroke</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="chipIconTint">@color/chip_icon_tint</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.App.BottomSheet</item>
+    </style>
+
+    <style name="Widget.App.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="backgroundTint">@color/background_white</item>
+    </style>
+
+    <style name="Widget.App.Button.Primary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary_blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="Widget.App.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/divider_color</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="cornerRadius">22dp</item>
+    </style>
+
+    <style name="Widget.App.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">#63B3ED</item>
+        <item name="tint">@color/white</item>
+        <item name="elevation">12dp</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary_blue</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+        <item name="hintTextColor">@color/primary_blue</item>
+    </style>
+
 </resources>

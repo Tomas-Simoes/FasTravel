@@ -4,9 +4,9 @@
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/background_white">
 
-    <!-- Mapa full screen com gradiente overlay + FAB -->
+    <!-- Mapa full screen -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-
-        <!-- 🔹 FAB MENU AQUI DENTRO DO FRAMELAYOUT DO MAPA -->
+        <!-- FAB MENU -->
         <FrameLayout
             android:id="@+id/menu_fab_container"
             android:layout_width="wrap_content"
@@ -31,50 +30,50 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_themed_routes"
+                style="@style/Widget.App.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="240dp"
                 android:src="@drawable/ic_themedroutes"
                 app:fabSize="normal"
-                app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_3"
+                style="@style/Widget.App.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="180dp"
                 android:src="@drawable/ic_settings"
                 app:fabSize="normal"
-                app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_2"
+                style="@style/Widget.App.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="120dp"
                 android:src="@drawable/ic_history"
                 app:fabSize="normal"
-                app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_1"
+                style="@style/Widget.App.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="60dp"
                 android:src="@drawable/ic_person"
                 app:fabSize="normal"
-                app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.card.MaterialCardView
@@ -84,7 +83,7 @@
                 android:layout_gravity="bottom|end"
                 app:cardCornerRadius="28dp"
                 app:cardElevation="12dp"
-                app:cardBackgroundColor="#3B82F6"
+                app:cardBackgroundColor="@color/fab_main"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground">
@@ -95,7 +94,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="JD"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -104,16 +103,17 @@
         </FrameLayout>
     </FrameLayout>
 
+    <!-- Navigation Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_navigation"
+        style="@style/Widget.App.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:visibility="gone"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
-        app:strokeWidth="0dp"
-        android:backgroundTint="#FFFFFF">
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,7 +140,7 @@
                         android:layout_height="28dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_navigation_arrow"
-                        android:tint="#FFFFFF" />
+                        android:tint="@color/white" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -155,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:text="Próxima direção"
                         android:textSize="12sp"
-                        android:textColor="#64748B"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="2dp" />
 
@@ -166,7 +166,7 @@
                         android:text="Em 200 m"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
             </LinearLayout>
@@ -178,7 +178,7 @@
                 android:text="Vire à direita na Rua da República"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#0F172A"
+                android:textColor="?attr/android:textColorPrimary"
                 android:fontFamily="sans-serif-medium"
                 android:lineSpacingExtra="4dp"
                 android:layout_marginBottom="12dp" />
@@ -195,7 +195,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_info"
-                    android:tint="#3B82F6"
+                    android:tint="?attr/colorPrimary"
                     android:layout_marginEnd="8dp" />
 
                 <TextView
@@ -205,7 +205,7 @@
                     android:layout_weight="1"
                     android:text="Depois continue em frente por 500 m"
                     android:textSize="13sp"
-                    android:textColor="#475569"
+                    android:textColor="?attr/android:textColorSecondary"
                     android:fontFamily="sans-serif" />
             </LinearLayout>
 
@@ -213,15 +213,14 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
-    <!-- Bottom Sheet moderno -->
+    <!-- Bottom Sheet -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottom_sheet"
+        style="@style/Widget.App.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="32dp"
         app:cardElevation="16dp"
-        app:cardBackgroundColor="@android:color/white"
         app:layout_behavior="@string/bottom_sheet_behavior"
         app:behavior_hideable="false"
         app:behavior_peekHeight="120dp">
@@ -231,7 +230,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Handle moderno -->
+            <!-- Handle -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
@@ -245,7 +244,7 @@
                     android:alpha="0.3" />
             </LinearLayout>
 
-            <!-- Conteúdo do bottom sheet -->
+            <!-- Conteúdo scrollable -->
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/bottom_sheet_scroll"
                 android:layout_width="match_parent"
@@ -260,16 +259,16 @@
                     android:paddingEnd="24dp"
                     android:paddingBottom="32dp">
 
-                    <!-- Input Container com design moderno -->
+                    <!-- Input Container -->
                     <com.google.android.material.card.MaterialCardView
+                        style="@style/Widget.App.CardView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         app:cardCornerRadius="24dp"
                         app:cardElevation="2dp"
                         app:strokeWidth="1dp"
-                        app:strokeColor="#E2E8F0"
-                        app:cardBackgroundColor="@android:color/white">
+                        app:strokeColor="?attr/colorOutline">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -290,14 +289,14 @@
                                     android:layout_height="44dp"
                                     app:cardCornerRadius="22dp"
                                     app:cardElevation="0dp"
-                                    app:cardBackgroundColor="#3B82F6">
+                                    app:cardBackgroundColor="?attr/colorPrimary">
 
                                     <ImageView
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_gravity="center"
                                         android:src="@drawable/ic_circle"
-                                        app:tint="@android:color/white" />
+                                        app:tint="@color/white" />
                                 </com.google.android.material.card.MaterialCardView>
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -308,8 +307,8 @@
                                     android:layout_marginStart="16dp"
                                     android:hint="Starting point"
                                     android:textSize="15sp"
-                                    android:textColor="#0F172A"
-                                    android:textColorHint="#94A3B8"
+                                    android:textColor="?attr/android:textColorPrimary"
+                                    android:textColorHint="?attr/android:textColorHint"
                                     android:fontFamily="sans-serif-medium"
                                     android:background="@android:color/transparent"
                                     android:inputType="text" />
@@ -320,7 +319,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginStart="76dp"
-                                android:background="#F1F5F9" />
+                                android:background="?attr/colorOutline"
+                                android:alpha="0.3" />
 
                             <!-- Ponto B -->
                             <LinearLayout
@@ -336,14 +336,14 @@
                                     android:layout_height="44dp"
                                     app:cardCornerRadius="22dp"
                                     app:cardElevation="0dp"
-                                    app:cardBackgroundColor="#10B981">
+                                    app:cardBackgroundColor="@color/secondary_green">
 
                                     <ImageView
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
                                         android:layout_gravity="center"
                                         android:src="@drawable/ic_location"
-                                        app:tint="@android:color/white" />
+                                        app:tint="@color/white" />
                                 </com.google.android.material.card.MaterialCardView>
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -354,8 +354,8 @@
                                     android:layout_marginStart="16dp"
                                     android:hint="Where to?"
                                     android:textSize="15sp"
-                                    android:textColor="#0F172A"
-                                    android:textColorHint="#94A3B8"
+                                    android:textColor="?attr/android:textColorPrimary"
+                                    android:textColorHint="?attr/android:textColorHint"
                                     android:fontFamily="sans-serif-medium"
                                     android:background="@android:color/transparent"
                                     android:inputType="text" />
@@ -363,10 +363,10 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Botão inverter redesigned -->
+                    <!-- Botão inverter -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_inverter"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        style="@style/Widget.App.Button.Outlined"
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_gravity="end"
@@ -377,20 +377,16 @@
                         android:fontFamily="sans-serif-medium"
                         app:icon="@drawable/ic_swap"
                         app:iconGravity="start"
-                        app:iconPadding="8dp"
-                        app:strokeColor="#CBD5E1"
-                        app:strokeWidth="1dp"
-                        app:cornerRadius="22dp"
-                        android:textColor="#475569" />
+                        app:iconPadding="8dp" />
 
-                    <!-- Favoritos Section -->
+                    <!-- Favoritos -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Favorites"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="12dp" />
 
@@ -414,7 +410,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:gravity="center"
-                                android:paddingStart="0dp"
                                 android:paddingEnd="20dp"
                                 android:background="?attr/selectableItemBackgroundBorderless">
 
@@ -424,15 +419,15 @@
                                     app:cardCornerRadius="32dp"
                                     app:cardElevation="2dp"
                                     app:strokeWidth="1dp"
-                                    app:strokeColor="#E2E8F0"
-                                    app:cardBackgroundColor="#F8FAFC">
+                                    app:strokeColor="?attr/colorOutline"
+                                    app:cardBackgroundColor="?attr/colorSurface">
 
                                     <ImageView
                                         android:layout_width="28dp"
                                         android:layout_height="28dp"
                                         android:layout_gravity="center"
                                         android:src="@drawable/ic_home"
-                                        app:tint="#3B82F6" />
+                                        app:tint="?attr/colorPrimary" />
                                 </com.google.android.material.card.MaterialCardView>
 
                                 <TextView
@@ -440,17 +435,17 @@
                                     android:layout_height="wrap_content"
                                     android:text="Casa"
                                     android:textSize="12sp"
-                                    android:textColor="#475569"
+                                    android:textColor="?attr/android:textColorSecondary"
                                     android:layout_marginTop="8dp"
                                     android:fontFamily="sans-serif-medium" />
 
                                 <TextView
+                                    android:id="@+id/text_subtitulo_casa"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/text_subtitulo_casa"
                                     android:text="Adicionar"
                                     android:textSize="10sp"
-                                    android:textColor="#3B82F6"
+                                    android:textColor="?attr/colorPrimary"
                                     android:layout_marginTop="2dp" />
                             </LinearLayout>
 
@@ -461,7 +456,6 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:gravity="center"
-                                android:paddingStart="0dp"
                                 android:paddingEnd="20dp"
                                 android:background="?attr/selectableItemBackgroundBorderless">
 
@@ -471,15 +465,15 @@
                                     app:cardCornerRadius="32dp"
                                     app:cardElevation="2dp"
                                     app:strokeWidth="1dp"
-                                    app:strokeColor="#E2E8F0"
-                                    app:cardBackgroundColor="#F8FAFC">
+                                    app:strokeColor="?attr/colorOutline"
+                                    app:cardBackgroundColor="?attr/colorSurface">
 
                                     <ImageView
                                         android:layout_width="28dp"
                                         android:layout_height="28dp"
                                         android:layout_gravity="center"
                                         android:src="@drawable/ic_work"
-                                        app:tint="#10B981" />
+                                        app:tint="@color/secondary_green" />
                                 </com.google.android.material.card.MaterialCardView>
 
                                 <TextView
@@ -487,7 +481,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Trabalho"
                                     android:textSize="12sp"
-                                    android:textColor="#475569"
+                                    android:textColor="?attr/android:textColorSecondary"
                                     android:layout_marginTop="8dp"
                                     android:fontFamily="sans-serif-medium" />
 
@@ -497,19 +491,17 @@
                                     android:layout_height="wrap_content"
                                     android:text="Adicionar"
                                     android:textSize="10sp"
-                                    android:textColor="#3B82F6"
+                                    android:textColor="?attr/colorPrimary"
                                     android:layout_marginTop="2dp" />
                             </LinearLayout>
 
-                            <!-- Add New Favorite -->
+                            <!-- Add New -->
                             <LinearLayout
                                 android:id="@+id/btn_adicionar_favorito"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:gravity="center"
-                                android:paddingStart="0dp"
-                                android:paddingEnd="0dp"
                                 android:background="?attr/selectableItemBackgroundBorderless">
 
                                 <com.google.android.material.card.MaterialCardView
@@ -518,15 +510,15 @@
                                     app:cardCornerRadius="32dp"
                                     app:cardElevation="2dp"
                                     app:strokeWidth="2dp"
-                                    app:strokeColor="#CBD5E1"
-                                    app:cardBackgroundColor="@android:color/white">
+                                    app:strokeColor="?attr/colorOutline"
+                                    app:cardBackgroundColor="?attr/colorSurface">
 
                                     <ImageView
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:layout_gravity="center"
                                         android:src="@drawable/ic_add"
-                                        app:tint="#64748B" />
+                                        app:tint="?attr/android:textColorSecondary" />
                                 </com.google.android.material.card.MaterialCardView>
 
                                 <TextView
@@ -534,7 +526,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Adicionar"
                                     android:textSize="12sp"
-                                    android:textColor="#64748B"
+                                    android:textColor="?attr/android:textColorSecondary"
                                     android:layout_marginTop="8dp"
                                     android:fontFamily="sans-serif-medium" />
                             </LinearLayout>
@@ -542,15 +534,14 @@
                         </LinearLayout>
                     </HorizontalScrollView>
 
-                    <!-- Modos transporte redesigned -->
-
+                    <!-- Transport Mode -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Transport Mode"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="12dp" />
 
@@ -565,14 +556,12 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_carro"
-                            style="@style/Widget.Material3.Chip.Filter"
+                            style="@style/Widget.App.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
                             android:textColor="@color/chip_text_color"
                             android:checked="true"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
                             app:chipCornerRadius="28dp"
                             app:chipMinHeight="56dp"
@@ -589,13 +578,10 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_pe"
-                            style="@style/Widget.Material3.Chip.Filter"
+                            style="@style/Widget.App.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textColor="@color/chip_text_color"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
                             app:chipCornerRadius="28dp"
                             app:chipMinHeight="56dp"
@@ -612,13 +598,10 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_comboio"
-                            style="@style/Widget.Material3.Chip.Filter"
+                            style="@style/Widget.App.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textColor="@color/chip_text_color"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
                             app:chipCornerRadius="28dp"
                             app:chipMinHeight="56dp"
@@ -635,13 +618,10 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_bicicleta"
-                            style="@style/Widget.Material3.Chip.Filter"
+                            style="@style/Widget.App.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textColor="@color/chip_text_color"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
                             app:chipCornerRadius="28dp"
                             app:chipMinHeight="56dp"
@@ -658,13 +638,10 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_autocarro"
-                            style="@style/Widget.Material3.Chip.Filter"
+                            style="@style/Widget.App.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textColor="@color/chip_text_color"
-                            app:chipBackgroundColor="@color/chip_background"
-                            app:chipStrokeColor="@color/chip_stroke"
                             app:chipStrokeWidth="1dp"
                             app:chipCornerRadius="28dp"
                             app:chipMinHeight="56dp"
@@ -680,9 +657,10 @@
                             app:checkedIconVisible="false" />
                     </com.google.android.material.chip.ChipGroup>
 
+                    <!-- Find Routes Button -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_encontrar_rota"
-                        style="@style/Widget.Material3.Button.ElevatedButton"
+                        style="@style/Widget.App.Button.Primary"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:text="Find Routes"
@@ -690,13 +668,11 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="#FFFFFF"
-                        app:backgroundTint="@null"
                         android:background="@drawable/button_gradient_primary"
-                        app:cornerRadius="16dp"
-                        app:iconGravity="textStart"
+                        app:backgroundTint="@null"
                         app:icon="@drawable/ic_search"
-                        app:iconTint="#FFFFFF"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white"
                         app:iconSize="20dp"
                         app:iconPadding="8dp"
                         android:paddingStart="24dp"
@@ -705,7 +681,7 @@
                         android:elevation="6dp"
                         android:stateListAnimator="@null" />
 
-                    <!-- Resultados -->
+                    <!-- Results Section -->
                     <TextView
                         android:id="@+id/tv_resultados_titulo"
                         android:layout_width="match_parent"
@@ -713,7 +689,7 @@
                         android:text="Route Suggestions"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:fontFamily="sans-serif-medium"
                         android:visibility="gone"
                         android:layout_marginBottom="12dp" />

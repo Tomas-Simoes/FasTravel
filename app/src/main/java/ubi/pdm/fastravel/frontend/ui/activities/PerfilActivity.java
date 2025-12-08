@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -103,10 +104,10 @@ public class PerfilActivity extends AppCompatActivity {
             if (isChecked) {
                 Toast.makeText(this, "Modo Escuro Ativado 🌙", Toast.LENGTH_SHORT).show();
                 // Implementar modo escuro
-                // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 Toast.makeText(this, "Modo Escuro Desativado", Toast.LENGTH_SHORT).show();
-                // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
 

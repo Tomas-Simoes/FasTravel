@@ -141,6 +141,8 @@ public class BuscarRotaFragment extends Fragment {
 
     private FavoritesManager favoritesManager;
 
+    private RouteInfo currentRoute;
+
     private final ActivityResultLauncher<Intent> themedRouteLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
@@ -304,6 +306,8 @@ public class BuscarRotaFragment extends Fragment {
 
                     drawRoute(route.routePoints);
 
+                    currentRoute = route;
+
                     bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
                     startNavigation(route);
@@ -318,6 +322,22 @@ public class BuscarRotaFragment extends Fragment {
         setupFindRoutes(view);
 
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopNavigation();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (currentRoute != null && currentRoute.navSteps != null && !currentRoute.navSteps.isEmpty()) {
+            drawRoute(currentRoute.routePoints);
+            startNavigation(currentRoute);
+        }
     }
 
     @Override
@@ -475,6 +495,8 @@ public class BuscarRotaFragment extends Fragment {
                     }
 
                     drawRoute(routes.get(0).routePoints);
+
+                    currentRoute = (routes.get(0));
 
                     currentRoutes.clear();
                     currentRoutes.addAll(routes);
@@ -767,12 +789,6 @@ public class BuscarRotaFragment extends Fragment {
         fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
 
         isFabOpen = false;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        stopNavigation();
     }
 
     private void updateNavInstructionUI() {
@@ -1073,6 +1089,7 @@ public class BuscarRotaFragment extends Fragment {
             Intent intent = new Intent(requireContext(), PerfilActivity.class);
             startActivity(intent);
             closeFabMenu();
+
         });
 
         fabHistory.setOnClickListener(v -> {
