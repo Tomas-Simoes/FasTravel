@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static String BACKEND_URL = "test";
+    private static String BACKEND_URL = "https://fastravel-production.up.railway.app:8080/";
     private static ApiInterface instance;
 
     public static ApiInterface getInstance() {
@@ -19,7 +19,7 @@ public class ApiClient {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BACKEND_URL)  // muda isto
+                    .baseUrl(BACKEND_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

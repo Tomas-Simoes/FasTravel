@@ -10,7 +10,7 @@ public class CacheManager {
     private static final String PREFS_NAME = "ApiCache";
     private static final String CACHE_PREFIX = "cache_";
     private static final String TIMESTAMP_PREFIX = "timestamp_";
-    private static final long DEFAULT_CACHE_DURATION = TimeUnit.HOURS.toMillis(1); // 1 hora por defeito
+    private static final long DEFAULT_CACHE_DURATION = TimeUnit.HOURS.toMillis(24); // 1 hora por defeito
 
     private SharedPreferences prefs;
     private Gson gson;

@@ -11,4 +11,8 @@ Rails.application.routes.draw do
   # POST /users    -> UsersController#create 
   # GET /users/:id -> UsersController#show
   resources :users, only: [:create, :show]
+
+ # POST /histories    -> HistoriesController#create 
+  # GET /histories    -> HistoriesController#show
+  resources :histories, only: [:index, :create] # Permitir listar e criar
 end
