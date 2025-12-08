@@ -1,4 +1,4 @@
-package ubi.pdm.fastravel.frontend.ui.activities; // Pacote mantido
+package ubi.pdm.fastravel.frontend.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
 // import ubi.pdm.fastravel.frontend.ui.activities.LoginActivity;
 // import ubi.pdm.fastravel.frontend.ui.activities.MainActivity; // Assumindo que esta é a próxima Activity
 
-public class RegisterActivity extends AppCompatActivity { // 1. Mudar de Fragment para Activity
+public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 

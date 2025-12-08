@@ -116,7 +116,7 @@ public class BuscarRotaFragment extends Fragment {
 
     private MaterialCardView fabMain, cardNavigation;
 
-    private FloatingActionButton fabPerfil, fabHistory, fab3, fabThemedRoutes;
+    private FloatingActionButton fabPerfil, fabHistory, fabThemedRoutes;
     private TextView tvIniciais;
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
@@ -744,16 +744,14 @@ public class BuscarRotaFragment extends Fragment {
     private void openFabMenu() {
         fabPerfil.setVisibility(View.VISIBLE);
         fabHistory.setVisibility(View.VISIBLE);
-        fab3.setVisibility(View.VISIBLE);
         fabThemedRoutes.setVisibility(View.VISIBLE);
 
 
-        fabPerfil.setAlpha(0f); fabHistory.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
-        fabPerfil.setTranslationY(100f); fabHistory.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
+        fabPerfil.setAlpha(0f); fabHistory.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
+        fabPerfil.setTranslationY(100f); fabHistory.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
 
         fabPerfil.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
         fabHistory.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
-        fab3.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(100).start();
         fabThemedRoutes.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(150).start();
 
         isFabOpen = true;
@@ -763,7 +761,6 @@ public class BuscarRotaFragment extends Fragment {
 
         fabPerfil.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabPerfil.setVisibility(View.GONE)).start();
         fabHistory.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabHistory.setVisibility(View.GONE)).start();
-        fab3.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab3.setVisibility(View.GONE)).start();
         fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
 
         isFabOpen = false;
@@ -946,7 +943,6 @@ public class BuscarRotaFragment extends Fragment {
         fabMain = view.findViewById(R.id.fab_main);
         fabPerfil = view.findViewById(R.id.fab_1);
         fabHistory = view.findViewById(R.id.fab_2);
-        fab3 = view.findViewById(R.id.fab_3);
         fabThemedRoutes = view.findViewById(R.id.fab_themed_routes);
 
         tvIniciais = view.findViewById(R.id.tv_iniciais);
@@ -1006,6 +1002,8 @@ public class BuscarRotaFragment extends Fragment {
             LatLng tempLatLng = originLatLng;
             originLatLng = destLatLng;
             destLatLng = tempLatLng;
+
+            Toast.makeText(requireContext(), "Origem e destino trocados", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -1078,11 +1076,6 @@ public class BuscarRotaFragment extends Fragment {
         fabHistory.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), HistoryActivity.class);
             historyLauncher.launch(intent);
-            closeFabMenu();
-        });
-
-        fab3.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Definições", Toast.LENGTH_SHORT).show();
             closeFabMenu();
         });
 

@@ -34,23 +34,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_marginBottom="240dp"
+                android:layout_marginBottom="180dp"
                 android:src="@drawable/ic_themedroutes"
                 app:fabSize="normal"
                 app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
-                android:alpha="0"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="180dp"
-                android:src="@drawable/ic_settings"
-                app:fabSize="normal"
-                app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                app:backgroundTint="#63B3ED"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -62,7 +51,8 @@
                 android:src="@drawable/ic_history"
                 app:fabSize="normal"
                 app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                app:backgroundTint="#63B3ED"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -74,7 +64,8 @@
                 android:src="@drawable/ic_person"
                 app:fabSize="normal"
                 app:tint="@android:color/white"
-                app:backgroundTint="#63B3ED"  android:visibility="gone"
+                app:backgroundTint="#63B3ED"
+                android:visibility="gone"
                 android:alpha="0"/>
 
             <com.google.android.material.card.MaterialCardView
