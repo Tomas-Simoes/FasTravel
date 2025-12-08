@@ -87,6 +87,7 @@ import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.PerfilActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
+import ubi.pdm.fastravel.frontend.util.FavoritesManager;
 import ubi.pdm.fastravel.frontend.util.RouteAdapter;
 
 public class BuscarRotaFragment extends Fragment {
@@ -138,14 +139,8 @@ public class BuscarRotaFragment extends Fragment {
 
     private float currentDistanceToEndMeters = -1f;
 
+    private FavoritesManager favoritesManager;
 
-    private enum FavoriteType {
-        HOME,
-        WORK,
-        OTHER
-    }
-
-    private FavoriteType tipoFavoritoAtual;
     private final ActivityResultLauncher<Intent> themedRouteLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
@@ -261,10 +256,29 @@ public class BuscarRotaFragment extends Fragment {
 
         prefs = requireContext().getSharedPreferences("fastravel_prefs", Context.MODE_PRIVATE);
 
-        setupFavouriteClicks();
+        favoritesManager = new FavoritesManager(
+                requireContext(),
+                prefs,
+                containerFavoritos,
+                favoritoCasa,
+                favoritoTrabalho,
+                btnAdicionarFavorito,
+                textSubtituloCasa,
+                textSubtituloTrabalho,
+                new FavoritesManager.Listener() {
+                    @Override
+                    public void onFavoriteSelected(LatLng latLng, String label) {
+                        useLatLngAsDestination(latLng, label);
+                    }
 
-        loadFavourites();
-        loadExtraFavourites();
+                    @Override
+                    public void onRequestPlaceForFavorite(FavoritesManager.FavoriteType type) {
+                        openAutocomplete(REQ_AUTOCOMPLETE_DEST, type);
+                    }
+                }
+        );
+
+        favoritesManager.init();
 
 
 
@@ -279,7 +293,6 @@ public class BuscarRotaFragment extends Fragment {
 
         setupFabClicks();
 
-        // Recycler de resultados
         recyclerRotas = view.findViewById(R.id.recycler_rotas);
         recyclerRotas.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -358,9 +371,7 @@ public class BuscarRotaFragment extends Fragment {
                             Place place = response.getPlace();
                             LatLng latLng = place.getLocation();
 
-                            if (tipoFavoritoAtual != null) {
-                                saveFavourite(place);
-                                tipoFavoritoAtual = null;
+                            if (favoritesManager != null && favoritesManager.handlePlaceSelected(place)) {
                                 return;
                             }
 
@@ -398,6 +409,7 @@ public class BuscarRotaFragment extends Fragment {
         );
     }
 
+<<<<<<< Updated upstream
     private void clearFavourite(FavoriteType type) {
         String prefix = (type == FavoriteType.HOME) ? "fav_home_" : "fav_work_";
 
@@ -662,6 +674,8 @@ public class BuscarRotaFragment extends Fragment {
         useLatLngAsDestination(latLng, name);
     }
 
+=======
+>>>>>>> Stashed changes
     private void showTurnByTurnDirections(RouteInfo route) {
         if (route.itineraryLines == null || route.itineraryLines.isEmpty()) {
             Toast.makeText(requireContext(),
@@ -691,63 +705,6 @@ public class BuscarRotaFragment extends Fragment {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    private void setupFavouriteClicks() {
-
-        favoritoCasa.setOnClickListener(v -> {
-            if (existsFavourite(FavoriteType.HOME)) {
-                useFavourite(FavoriteType.HOME);
-            } else {
-                openAutocomplete(REQ_AUTOCOMPLETE_DEST, FavoriteType.HOME);
-            }
-        });
-
-        favoritoCasa.setOnLongClickListener(v -> {
-            if (!existsFavourite(FavoriteType.HOME)) return true;
-
-            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Remover Casa?")
-                    .setMessage("Queres apagar o favorito Casa?")
-                    .setPositiveButton("Remover", (dialog, which) -> {
-                        clearFavourite(FavoriteType.HOME);
-                        loadFavourites();
-                        Toast.makeText(requireContext(), "Casa removida dos favoritos", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
-
-            return true;
-        });
-
-        favoritoTrabalho.setOnLongClickListener(v -> {
-            if (!existsFavourite(FavoriteType.WORK)) return true;
-
-            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Remover Trabalho?")
-                    .setMessage("Queres apagar o favorito Trabalho?")
-                    .setPositiveButton("Remover", (dialog, which) -> {
-                        clearFavourite(FavoriteType.WORK);
-                        loadFavourites();
-                        Toast.makeText(requireContext(), "Trabalho removido dos favoritos", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
-
-            return true;
-        });
-
-        favoritoTrabalho.setOnClickListener(v -> {
-            if (existsFavourite(FavoriteType.WORK)) {
-                useFavourite(FavoriteType.WORK);
-            } else {
-                openAutocomplete(REQ_AUTOCOMPLETE_DEST, FavoriteType.WORK);
-            }
-        });
-
-        btnAdicionarFavorito.setOnClickListener(v -> {
-            openAutocomplete(REQ_AUTOCOMPLETE_DEST, FavoriteType.OTHER);
-        });
-    }
-
     private void initMap() {
         SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (smf == null) return;
@@ -759,8 +716,6 @@ public class BuscarRotaFragment extends Fragment {
         map.getUiSettings().setZoomControlsEnabled(true);
         enableMyLocationAndCenter();
     }
-
-    // ============= DIRECTIONS / ROTAS ============= //
 
     private void requestRoute(String origin, String destination, String mode,
                               @Nullable String transitMode, @Nullable List<String> waypoints) {
@@ -973,8 +928,11 @@ public class BuscarRotaFragment extends Fragment {
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
     }
 
-    private void openAutocomplete(int requestCode, @Nullable FavoriteType type) {
-        tipoFavoritoAtual = type;
+    private void openAutocomplete(int requestCode, @Nullable FavoritesManager.FavoriteType favoriteType) {
+        if (favoritesManager != null) {
+            favoritesManager.onStartFavoriteSelection(favoriteType);
+        }
+
         isSelectingOrigin = (requestCode == REQ_AUTOCOMPLETE_ORIGIN);
 
         PlaceAutocomplete.IntentBuilder builder = new PlaceAutocomplete.IntentBuilder();
@@ -1014,8 +972,6 @@ public class BuscarRotaFragment extends Fragment {
             Toast.makeText(requireContext(), "Permissão de localização negada", Toast.LENGTH_SHORT).show();
         }
     }
-
-    // ========= MODELO PARA A RECYCLER ========= //
 
     public static class RouteInfo {
         public String summary;
