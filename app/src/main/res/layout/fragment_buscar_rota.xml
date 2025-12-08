@@ -6,19 +6,12 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <FrameLayout
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-<<<<<<< Updated upstream
-
-        <!-- 🔹 FAB MENU AQUI DENTRO DO FRAMELAYOUT DO MAPA -->
     <FrameLayout
         android:id="@+id/menu_fab_container"
         android:layout_width="wrap_content"
@@ -31,60 +24,54 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_themed_routes"
-=======
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/gradient_top_overlay" />
-
-        <FrameLayout
-            android:id="@+id/menu_fab_container"
->>>>>>> Stashed changes
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="240dp"
             android:src="@drawable/ic_themedroutes"
             app:fabSize="normal"
             app:tint="@android:color/white"
-            app:backgroundTint="#63B3ED"  android:visibility="gone"
+            app:backgroundTint="#63B3ED"
+            android:visibility="gone"
             android:alpha="0"/>
 
-<<<<<<< Updated upstream
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="180dp"
             android:src="@drawable/ic_settings"
             app:fabSize="normal"
             app:tint="@android:color/white"
-            app:backgroundTint="#63B3ED"  android:visibility="gone"
+            app:backgroundTint="#63B3ED"
+            android:visibility="gone"
             android:alpha="0"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="120dp"
             android:src="@drawable/ic_history"
             app:fabSize="normal"
             app:tint="@android:color/white"
-            app:backgroundTint="#63B3ED"  android:visibility="gone"
+            app:backgroundTint="#63B3ED"
+            android:visibility="gone"
             android:alpha="0"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="60dp"
             android:src="@drawable/ic_person"
             app:fabSize="normal"
             app:tint="@android:color/white"
-            app:backgroundTint="#63B3ED"  android:visibility="gone"
+            app:backgroundTint="#63B3ED"
+            android:visibility="gone"
             android:alpha="0"/>
 
         <com.google.android.material.card.MaterialCardView
@@ -98,55 +85,6 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground">
-=======
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="180dp"
-                android:src="@drawable/ic_settings"
-                app:fabSize="normal"
-                app:tint="@android:color/white"
-                android:visibility="gone"
-                android:alpha="0"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="120dp"
-                android:src="@drawable/ic_history"
-                app:fabSize="normal"
-                app:tint="@android:color/white"
-                android:visibility="gone"
-                android:alpha="0"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="60dp"
-                android:src="@drawable/ic_person"
-                app:fabSize="normal"
-                app:tint="@android:color/white"
-                android:visibility="gone"
-                android:alpha="0"/>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/fab_main"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="bottom|end"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="12dp"
-                app:cardBackgroundColor="#3B82F6"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
->>>>>>> Stashed changes
 
             <TextView
                 android:id="@+id/tv_iniciais"
@@ -161,10 +99,8 @@
         </com.google.android.material.card.MaterialCardView>
 
     </FrameLayout>
-    </FrameLayout>
 
-<<<<<<< Updated upstream
-=======
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/search_bar_card"
         android:layout_width="match_parent"
@@ -236,7 +172,6 @@
                 app:tint="#94A3B8" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
->>>>>>> Stashed changes
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottom_sheet"
@@ -245,7 +180,7 @@
         app:cardCornerRadius="32dp"
         app:cardElevation="16dp"
         app:cardBackgroundColor="@android:color/white"
-        app:layout_behavior="@string/bottom_sheet_behavior"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="false"
         app:behavior_peekHeight="120dp">
 
@@ -554,11 +489,6 @@
                         </LinearLayout>
                     </HorizontalScrollView>
 
-<<<<<<< Updated upstream
-                    <!-- Modos transporte redesigned -->
-
-=======
->>>>>>> Stashed changes
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

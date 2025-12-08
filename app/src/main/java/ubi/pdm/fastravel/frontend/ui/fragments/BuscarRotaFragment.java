@@ -77,6 +77,7 @@ import java.util.List;
 import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
+import ubi.pdm.fastravel.frontend.ui.activities.PerfilActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
 
 public class BuscarRotaFragment extends Fragment {
@@ -233,8 +234,11 @@ public class BuscarRotaFragment extends Fragment {
                 }
             });
 
+    private final ActivityResultLauncher<Intent> perfilLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {});
     private final ActivityResultLauncher<Intent> historyLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {});
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -284,7 +288,8 @@ public class BuscarRotaFragment extends Fragment {
 
         // Listeners dos sub-botões
         fab1.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Perfil", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), PerfilActivity.class);
+            perfilLauncher.launch(intent);
             closeFabMenu();
         });
 

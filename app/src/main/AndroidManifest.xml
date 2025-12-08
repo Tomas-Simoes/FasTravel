@@ -25,6 +25,7 @@
 
         <activity android:name=".frontend.ui.activities.MainActivity" />
         <activity android:name=".frontend.ui.activities.ThemedRoutesActivity" />
+        <activity android:name=".frontend.ui.activities.PerfilActivity" />
         <activity android:name=".frontend.ui.activities.HistoryActivity" />
 
         <meta-data
