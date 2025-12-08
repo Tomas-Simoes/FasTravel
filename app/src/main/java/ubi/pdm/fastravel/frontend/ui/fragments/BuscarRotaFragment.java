@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -75,13 +76,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.APIModule.RequestResponse.HistoryRequest;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.HistoryRepository;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserHistory;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
@@ -306,7 +314,7 @@ public class BuscarRotaFragment extends Fragment {
 
                     bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
-                    startNavigation(route);
+                    startNavigation(route, false);
 
                     if (bottomSheetBehavior != null) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -468,6 +476,11 @@ public class BuscarRotaFragment extends Fragment {
 
                 List<RouteInfo> routes = parseRoutes(sb.toString(), mode);
 
+                for (RouteInfo route: routes) {
+                    route.origin = origin;
+                    route.destiny = destination;
+                }
+
                 requireActivity().runOnUiThread(() -> {
                     if (routes.isEmpty()) {
                         Toast.makeText(requireContext(), "Nenhuma rota encontrada", Toast.LENGTH_SHORT).show();
@@ -484,7 +497,7 @@ public class BuscarRotaFragment extends Fragment {
                     tvResultados.setVisibility(View.VISIBLE);
                     recyclerRotas.setVisibility(View.VISIBLE);
 
-                    startNavigation(routes.get(0));
+                    startNavigation(routes.get(0), false);
 
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 });
@@ -707,6 +720,8 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     public static class RouteInfo {
+        public String origin;
+        public String destiny;
         public String summary;
         public String durationText;
         public String arrivalTimeText;
@@ -884,6 +899,37 @@ public class BuscarRotaFragment extends Fragment {
             cardNavigation.setVisibility(View.GONE);
         }
 
+    }
+
+    private void startNavigation(RouteInfo route, boolean isRestart) {
+        if(isRestart) {
+            startNavigation(route);
+        } else {
+            new Thread(() -> {
+                HistoryRepository repo = new HistoryRepository(getContext());
+
+                String currentDate;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    currentDate = LocalDate.now().toString();
+                } else {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    currentDate = sdf.format(new Date());
+                }
+
+                UserHistory history = repo.createHistory(route.origin, route.destiny, currentDate);
+
+                getActivity().runOnUiThread(() -> {
+                    if (history != null) {
+                        Toast.makeText(getContext(), "Guardado com sucesso!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String errorMessage = repo.getLastErrorMessage();
+                        Toast.makeText(getContext(), "Erro: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
+
+            startNavigation(route);
+        }
     }
 
     private void startNavigation(RouteInfo route) {
