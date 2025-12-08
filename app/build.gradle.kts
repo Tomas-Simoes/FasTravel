@@ -49,4 +49,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:19.2.0")
     implementation("com.google.android.libraries.places:places:5.1.1")
     implementation("com.google.maps.android:android-maps-utils:3.19.1")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }
