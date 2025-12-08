@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F8FAFC">
+    android:background="@drawable/routes_background">
 
-    <!-- Botão de voltar -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="12dp"
-        android:src="@drawable/ic_arrow_back"
-        android:contentDescription="Voltar"
-        app:tint="@android:color/black" />
+    <!-- Header com Gradiente -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:background="@drawable/gradient_header"
+        android:padding="24dp">
+
+        <!-- Seta de Voltar -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@android:color/white" />
+
+        <!-- Título -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Available Routes"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose your journey"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:textColor="#E3F2FD" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <!-- Conteúdo principal -->
     <FrameLayout
@@ -39,37 +76,74 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:padding="32dp">
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tvLoading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="A carregar rotas..."
+                android:text="Loading routes..."
                 android:textSize="16sp"
-                android:textColor="#64748B"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please wait a moment"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp"
                 android:visibility="gone"/>
         </LinearLayout>
 
         <!-- Error State -->
-        <TextView
-            android:id="@+id/tvError"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/errorState"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Erro ao carregar rotas"
-            android:textSize="16sp"
-            android:textColor="#EF4444"
+            android:orientation="vertical"
             android:gravity="center"
-            android:padding="24dp"
-            android:visibility="gone"/>
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_error"
+                android:alpha="0.3"
+                app:tint="#EF4444"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error loading routes"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#EF4444"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please try again later"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:gravity="center" />
+
+        </LinearLayout>
 
     </FrameLayout>
 </LinearLayout>

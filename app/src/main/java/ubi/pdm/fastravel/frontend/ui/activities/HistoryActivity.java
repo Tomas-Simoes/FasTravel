@@ -3,6 +3,7 @@ package ubi.pdm.fastravel.frontend.ui.activities;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,12 +20,12 @@ import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.HistoryRepository;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserHistory;
 import ubi.pdm.fastravel.frontend.HistoryModule.HistoryController;
 import ubi.pdm.fastravel.frontend.HistoryModule.HistoryEntry;
-
+import android.widget.ImageView;
 public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private HistoryController adapter;
-    private ImageButton btnBack;
+    private ImageView btnBack;
     private ProgressBar progressBar;
     private LinearLayout emptyState;
 

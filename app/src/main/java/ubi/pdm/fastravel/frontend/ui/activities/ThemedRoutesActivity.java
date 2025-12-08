@@ -64,7 +64,7 @@ public class ThemedRoutesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_themedroutes); // Assumindo que o nome do layout é mantido
 
-        ImageButton btnBack = findViewById(R.id.btnBack);
+        android.widget.ImageView btnBack = findViewById(R.id.btnBack);
         recyclerView = findViewById(R.id.routesRecycler);
         progressBar = findViewById(R.id.progressBar);
         tvLoading = findViewById(R.id.tvLoading);
@@ -280,15 +280,15 @@ public class ThemedRoutesActivity extends AppCompatActivity {
     private String getColorForType(ThemedRoutesService.RouteType type) {
         switch (type) {
             case CULTURAL:
-                return "#E91E63"; // Rosa/Magenta
+                return "#00BCD4";
             case HISTORICAL:
-                return "#FF6F00"; // Laranja
+                return "#009688";
             case GREEN:
-                return "#2E7D32"; // Verde
+                return "#4CAF50";
             case GASTRONOMIC:
-                return "#1565C0"; // Azul
+                return "#689F38";
             default:
-                return "#1565C0"; // Azul
+                return "#00BCD4";
         }
     }
 

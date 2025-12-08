@@ -38,8 +38,8 @@ public class AboutActivity extends AppCompatActivity {
     private void setupListeners() {
         // Abrir GitHubs
         btnGithubTomas.setOnClickListener(v -> openGithub("tomasimoes"));
-        btnGithubLeonardo.setOnClickListener(v -> openGithub("leonardocasanova"));
-        btnGithubRafael.setOnClickListener(v -> openGithub("rafaelgomes"));
+        btnGithubLeonardo.setOnClickListener(v -> openGithub("leorcf"));
+        btnGithubRafael.setOnClickListener(v -> openGithub("Rafasta236"));
 
         // Botão de voltar com animação
         btnBack.setOnClickListener(v -> {
