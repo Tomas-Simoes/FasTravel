@@ -79,8 +79,8 @@ import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
-import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
 import ubi.pdm.fastravel.frontend.util.RouteAdapter;
+
 public class BuscarRotaFragment extends Fragment {
 
     private TextInputEditText inputPontoA, inputPontoB;
@@ -918,6 +918,12 @@ public class BuscarRotaFragment extends Fragment {
                     currentRoutes.clear();
                     currentRoutes.addAll(routes);
                     routeAdapter.notifyDataSetChanged();
+
+                    View tvResultados = requireView().findViewById(R.id.tv_resultados_titulo);
+                    tvResultados.setVisibility(View.VISIBLE);
+                    recyclerRotas.setVisibility(View.VISIBLE);
+
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 });
 
             } catch (Exception e) {
