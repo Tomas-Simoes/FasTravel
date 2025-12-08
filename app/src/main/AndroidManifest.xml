@@ -29,6 +29,7 @@
         <activity android:name=".frontend.ui.activities.LoginActivity" />
         <activity android:name=".frontend.ui.activities.RegisterActivity" />
         <activity android:name=".frontend.ui.activities.PerfilActivity" />
+        <activity android:name=".frontend.ui.activities.AboutActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

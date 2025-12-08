@@ -1,8 +1,10 @@
-package ubi.pdm.fastravel.frontend.ui.activities; // Pacote mantido
+package ubi.pdm.fastravel.frontend.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +25,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
+import ubi.pdm.fastravel.frontend.ui.fragments.BuscarRotaFragment;
 // Importar a LoginActivity para navegação
 // import ubi.pdm.fastravel.frontend.ui.activities.LoginActivity;
 // import ubi.pdm.fastravel.frontend.ui.activities.MainActivity; // Assumindo que esta é a próxima Activity
 
-public class RegisterActivity extends AppCompatActivity { // 1. Mudar de Fragment para Activity
+public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
@@ -147,6 +150,16 @@ public class RegisterActivity extends AppCompatActivity { // 1. Mudar de Fragmen
     }
 
     private void navigateToNextActivity() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 
+        // Navega para o fragment BuscarRotaFragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new BuscarRotaFragment())
+                .commit();
     }
+
 }

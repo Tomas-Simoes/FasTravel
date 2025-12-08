@@ -1,5 +1,6 @@
 package ubi.pdm.fastravel.frontend.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
 
 public class PerfilActivity extends AppCompatActivity {
 
@@ -47,7 +50,6 @@ public class PerfilActivity extends AppCompatActivity {
 
         // Switches de preferências
         switchDarkMode = findViewById(R.id.switch_dark_mode);
-        switchNotifications = findViewById(R.id.switch_notifications);
         switchCo2Routes = findViewById(R.id.switch_co2_routes);
 
         // Textos do perfil
@@ -56,40 +58,26 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void setupUserProfile() {
-        // Pega o nome do usuário (podes substituir por dados reais)
-        String nomeCompleto = textNomeUsuario.getText().toString();
+        UserRepository userRepository = new UserRepository(getApplicationContext());
+        UserData userData = userRepository.getUserFromCacheOrApi();
 
-        // Gera as iniciais automaticamente
-        String iniciais = gerarIniciais(nomeCompleto);
-        textIniciaisUsuario.setText(iniciais);
-    }
+        String[] parts = userData.name.trim().split("\\s+");
+        StringBuilder initials = new StringBuilder();
 
-    private String gerarIniciais(String nomeCompleto) {
-        if (nomeCompleto == null || nomeCompleto.isEmpty()) {
-            return "??";
+        for (String part : parts) {
+            initials.append(Character.toUpperCase(part.charAt(0)));
         }
 
-        String[] partes = nomeCompleto.trim().split("\\s+");
-        StringBuilder iniciais = new StringBuilder();
-
-        // Pega a primeira letra de cada palavra (máximo 2)
-        int count = 0;
-        for (String parte : partes) {
-            if (count >= 2) break;
-            if (!parte.isEmpty()) {
-                iniciais.append(parte.charAt(0));
-                count++;
-            }
-        }
-
-        return iniciais.toString().toUpperCase();
+        textNomeUsuario.setText(userData.name);
+        textIniciaisUsuario.setText(initials.toString());
     }
 
     private void setupListeners() {
         // Botão Sobre
-        btnSobre.setOnClickListener(v ->
-                Toast.makeText(this, "Sobre o FasTravel", Toast.LENGTH_SHORT).show()
-        );
+        btnSobre.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        });
 
         // Botão Sair
         btnSair.setOnClickListener(v -> {
@@ -99,27 +87,11 @@ public class PerfilActivity extends AppCompatActivity {
             // finish();
         });
 
-        // Switch Modo Escuro
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 Toast.makeText(this, "Modo Escuro Ativado 🌙", Toast.LENGTH_SHORT).show();
-                // Implementar modo escuro
-                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 Toast.makeText(this, "Modo Escuro Desativado", Toast.LENGTH_SHORT).show();
-                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        });
-
-        // Switch Notificações
-        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                Toast.makeText(this, "Notificações Ativadas 🔔", Toast.LENGTH_SHORT).show();
-                // Ativar notificações
-                // NotificationManagerCompat.from(this).areNotificationsEnabled();
-            } else {
-                Toast.makeText(this, "Notificações Desativadas", Toast.LENGTH_SHORT).show();
-                // Desativar notificações
             }
         });
 
@@ -128,19 +100,9 @@ public class PerfilActivity extends AppCompatActivity {
             if (isChecked) {
                 Toast.makeText(this, "Rotas Ecológicas Ativadas 🌱", Toast.LENGTH_SHORT).show();
                 // Salvar preferência
-                // SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-                // prefs.edit().putBoolean("eco_routes", true).apply();
             } else {
                 Toast.makeText(this, "Rotas Ecológicas Desativadas", Toast.LENGTH_SHORT).show();
-                // prefs.edit().putBoolean("eco_routes", false).apply();
             }
         });
-    }
-
-    // Método auxiliar para atualizar o perfil do usuário
-    public void atualizarPerfil(String nome) {
-        textNomeUsuario.setText(nome);
-        String iniciais = gerarIniciais(nome);
-        textIniciaisUsuario.setText(iniciais);
     }
 }

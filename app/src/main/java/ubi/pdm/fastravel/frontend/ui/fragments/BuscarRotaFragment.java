@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -75,13 +76,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.APIModule.RequestResponse.HistoryRequest;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.HistoryRepository;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserHistory;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
@@ -116,7 +124,7 @@ public class BuscarRotaFragment extends Fragment {
 
     private MaterialCardView fabMain, cardNavigation;
 
-    private FloatingActionButton fabPerfil, fabHistory, fab3, fabThemedRoutes;
+    private FloatingActionButton fabPerfil, fabHistory, fabThemedRoutes;
     private TextView tvIniciais;
     private boolean isFabOpen = false;
     private FrameLayout menuFabContainer;
@@ -310,7 +318,7 @@ public class BuscarRotaFragment extends Fragment {
 
                     bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
-                    startNavigation(route);
+                    startNavigation(route, false);
 
                     if (bottomSheetBehavior != null) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -488,6 +496,11 @@ public class BuscarRotaFragment extends Fragment {
 
                 List<RouteInfo> routes = parseRoutes(sb.toString(), mode);
 
+                for (RouteInfo route: routes) {
+                    route.origin = origin;
+                    route.destiny = destination;
+                }
+
                 requireActivity().runOnUiThread(() -> {
                     if (routes.isEmpty()) {
                         Toast.makeText(requireContext(), "Nenhuma rota encontrada", Toast.LENGTH_SHORT).show();
@@ -506,7 +519,7 @@ public class BuscarRotaFragment extends Fragment {
                     tvResultados.setVisibility(View.VISIBLE);
                     recyclerRotas.setVisibility(View.VISIBLE);
 
-                    startNavigation(routes.get(0));
+                    startNavigation(routes.get(0), false);
 
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 });
@@ -729,6 +742,8 @@ public class BuscarRotaFragment extends Fragment {
     }
 
     public static class RouteInfo {
+        public String origin;
+        public String destiny;
         public String summary;
         public String durationText;
         public String arrivalTimeText;
@@ -766,16 +781,14 @@ public class BuscarRotaFragment extends Fragment {
     private void openFabMenu() {
         fabPerfil.setVisibility(View.VISIBLE);
         fabHistory.setVisibility(View.VISIBLE);
-        fab3.setVisibility(View.VISIBLE);
         fabThemedRoutes.setVisibility(View.VISIBLE);
 
 
-        fabPerfil.setAlpha(0f); fabHistory.setAlpha(0f); fab3.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
-        fabPerfil.setTranslationY(100f); fabHistory.setTranslationY(100f); fab3.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
+        fabPerfil.setAlpha(0f); fabHistory.setAlpha(0f); fabThemedRoutes.setAlpha(0f);
+        fabPerfil.setTranslationY(100f); fabHistory.setTranslationY(100f); fabThemedRoutes.setTranslationY(100f);
 
         fabPerfil.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(0).start();
         fabHistory.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(50).start();
-        fab3.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(100).start();
         fabThemedRoutes.animate().translationY(0).alpha(1).setDuration(200).setStartDelay(150).start();
 
         isFabOpen = true;
@@ -785,7 +798,6 @@ public class BuscarRotaFragment extends Fragment {
 
         fabPerfil.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabPerfil.setVisibility(View.GONE)).start();
         fabHistory.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabHistory.setVisibility(View.GONE)).start();
-        fab3.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fab3.setVisibility(View.GONE)).start();
         fabThemedRoutes.animate().translationY(100f).alpha(0).setDuration(150).withEndAction(() -> fabThemedRoutes.setVisibility(View.GONE)).start();
 
         isFabOpen = false;
@@ -902,6 +914,37 @@ public class BuscarRotaFragment extends Fragment {
 
     }
 
+    private void startNavigation(RouteInfo route, boolean isRestart) {
+        if(isRestart) {
+            startNavigation(route);
+        } else {
+            new Thread(() -> {
+                HistoryRepository repo = new HistoryRepository(getContext());
+
+                String currentDate;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    currentDate = LocalDate.now().toString();
+                } else {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    currentDate = sdf.format(new Date());
+                }
+
+                UserHistory history = repo.createHistory(route.origin, route.destiny, currentDate);
+
+                getActivity().runOnUiThread(() -> {
+                    if (history != null) {
+                        Toast.makeText(getContext(), "Guardado com sucesso!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String errorMessage = repo.getLastErrorMessage();
+                        Toast.makeText(getContext(), "Erro: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
+
+            startNavigation(route);
+        }
+    }
+
     private void startNavigation(RouteInfo route) {
         if (route.navSteps == null || route.navSteps.isEmpty()) {
             Toast.makeText(requireContext(), "Sem passos de navegação para esta rota", Toast.LENGTH_SHORT).show();
@@ -962,7 +1005,6 @@ public class BuscarRotaFragment extends Fragment {
         fabMain = view.findViewById(R.id.fab_main);
         fabPerfil = view.findViewById(R.id.fab_1);
         fabHistory = view.findViewById(R.id.fab_2);
-        fab3 = view.findViewById(R.id.fab_3);
         fabThemedRoutes = view.findViewById(R.id.fab_themed_routes);
 
         tvIniciais = view.findViewById(R.id.tv_iniciais);
@@ -1022,6 +1064,8 @@ public class BuscarRotaFragment extends Fragment {
             LatLng tempLatLng = originLatLng;
             originLatLng = destLatLng;
             destLatLng = tempLatLng;
+
+            Toast.makeText(requireContext(), "Origem e destino trocados", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -1095,11 +1139,6 @@ public class BuscarRotaFragment extends Fragment {
         fabHistory.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), HistoryActivity.class);
             historyLauncher.launch(intent);
-            closeFabMenu();
-        });
-
-        fab3.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Definições", Toast.LENGTH_SHORT).show();
             closeFabMenu();
         });
 

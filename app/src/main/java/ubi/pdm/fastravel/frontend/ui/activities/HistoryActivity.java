@@ -3,6 +3,9 @@ package ubi.pdm.fastravel.frontend.ui.activities;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.HistoryRepository;
+import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserHistory;
 import ubi.pdm.fastravel.frontend.HistoryModule.HistoryController;
 import ubi.pdm.fastravel.frontend.HistoryModule.HistoryEntry;
 
@@ -20,80 +25,126 @@ public class HistoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private HistoryController adapter;
     private ImageButton btnBack;
+    private ProgressBar progressBar;
+    private LinearLayout emptyState;
+
+    private HistoryRepository historyRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        // 1. Initialize Back Button
+        // Initialize Repository
+        historyRepo = new HistoryRepository(this);
+
+        // Initialize Views
         btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close the current Activity and return to the previous one
-                onBackPressed();
-            }
-        });
-
-        // 2. Mock Data
-        List<HistoryEntry> mockTrips = createMockTrips();
-
-        // 3. Configure RecyclerView
         recyclerView = findViewById(R.id.recycler_historico);
+        progressBar = findViewById(R.id.progress_bar);
+        emptyState = findViewById(R.id.empty_state);
 
-        // Ensure a LayoutManager is set
+        // Back Button
+        btnBack.setOnClickListener(v -> onBackPressed());
+
+        // Configure RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Create and set the Adapter
-        adapter = new HistoryController(this, mockTrips);
-        recyclerView.setAdapter(adapter);
+        // Load History
+        loadHistory();
+    }
+
+    private void loadHistory() {
+        // Show loading
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
+
+        new Thread(() -> {
+            // Fetch histories from cache or API
+            List<UserHistory> histories = historyRepo.getHistoriesFromCacheOrApi();
+
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+
+                if (histories != null && !histories.isEmpty()) {
+                    // Convert UserHistory to HistoryEntry
+                    List<HistoryEntry> historyEntries = convertToHistoryEntries(histories);
+
+                    // Set adapter
+                    adapter = new HistoryController(this, historyEntries);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    // Show empty state
+                    emptyState.setVisibility(View.VISIBLE);
+                }
+            });
+        }).start();
     }
 
     /**
-     * Function to create a list of mock historyEntries.
-     * *NOTE: Replace android.R.drawable.ic_menu_directions 
-     * with your actual app drawables (e.g., R.drawable.ic_bus, R.drawable.ic_metro)*
+     * Converte UserHistory (do backend) para HistoryEntry (para UI)
      */
-    private List<HistoryEntry> createMockTrips() {
-        // Default Android icon for simulation
+    private List<HistoryEntry> convertToHistoryEntries(List<UserHistory> histories) {
+        List<HistoryEntry> entries = new ArrayList<>();
         int defaultIcon = android.R.drawable.ic_menu_directions;
 
-        List<HistoryEntry> historyEntries = new ArrayList<>();
+        for (UserHistory history : histories) {
+            HistoryEntry entry = new HistoryEntry(
+                    history.id,
+                    formatDate(history.travel_date),  // Data formatada
+                    "",                                // Duration removida
+                    "",                                // Hora início removida
+                    "",                                // Hora fim removida
+                    history.origin,
+                    history.destiny,
+                    defaultIcon
+            );
+            entries.add(entry);
+        }
 
-        historyEntries.add(new HistoryEntry(
-                1,
-                "Today, December 7, 2025",
-                "25 min",
-                "19:40",
-                "20:05",
-                "My House, Covilhã",
-                "Praça do Município",
-                defaultIcon
-        ));
+        return entries;
+    }
 
-        historyEntries.add(new HistoryEntry(
-                2,
-                "December 5, 2025",
-                "1h 15 min",
-                "08:30",
-                "09:45",
-                "Gare do Oriente, Lisbon",
-                "Praça do Comércio, Lisbon",
-                defaultIcon
-        ));
+    /**
+     * Formata a data do formato "2024-12-08" para "8 de Dezembro, 2024"
+     */
+    private String formatDate(String dateString) {
+        try {
+            String[] parts = dateString.split("-");
+            if (parts.length == 3) {
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                int day = Integer.parseInt(parts[2]);
 
-        historyEntries.add(new HistoryEntry(
-                3,
-                "November 28, 2025",
-                "12 min",
-                "13:10",
-                "13:22",
-                "University of Beira Interior (UBI)",
-                "Alegro Shopping Center",
-                defaultIcon
-        ));
+                String monthName = getMonthName(month);
+                return day + " de " + monthName + ", " + year;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dateString;
+    }
 
-        return historyEntries;
+    /**
+     * Retorna o nome do mês em português
+     */
+    private String getMonthName(int month) {
+        String[] months = {
+                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+        };
+        if (month >= 1 && month <= 12) {
+            return months[month - 1];
+        }
+        return "";
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Recarregar quando voltar à activity
+        loadHistory();
     }
 }

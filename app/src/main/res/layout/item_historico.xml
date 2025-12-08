@@ -20,6 +20,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Header com ícone e data -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,53 +48,23 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+                <!-- Data da viagem -->
                 <TextView
                     android:id="@+id/tv_titulo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date Placeholder"
+                    android:text="8 de Dezembro, 2024"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:textColor="#0F172A"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:ellipsize="end"
-                    android:layout_marginBottom="4dp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:src="@drawable/ic_clock"
-                        app:tint="#64748B"
-                        android:layout_marginEnd="6dp" />
-
-                    <TextView
-                        android:id="@+id/tv_tempo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Duration Placeholder"
-                        android:textSize="14sp"
-                        android:textColor="#64748B"
-                        android:fontFamily="sans-serif"
-                        android:maxLines="1"
-                        android:ellipsize="end" />
-                </LinearLayout>
+                    android:ellipsize="end" />
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_chevron_right"
-                app:tint="#CBD5E1"
-                android:layout_marginStart="8dp" />
         </LinearLayout>
 
+        <!-- Origem e Destino -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,30 +72,67 @@
             android:background="@drawable/itinerary_background"
             android:padding="12dp">
 
-            <TextView
-                android:id="@+id/tv_origem"
+            <!-- Origem -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Origin: Placeholder"
-                android:textSize="14sp"
-                android:textColor="#475569"
-                android:lineSpacingExtra="4dp"
-                android:fontFamily="sans-serif"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginBottom="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/tv_destino"
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_location"
+                    app:tint="#10B981"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tv_origem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lisboa, Portugal"
+                    android:textSize="14sp"
+                    android:textColor="#475569"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E2E8F0"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Destino -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Destination: Placeholder"
-                android:textSize="14sp"
-                android:textColor="#475569"
-                android:lineSpacingExtra="4dp"
-                android:fontFamily="sans-serif"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_location"
+                    app:tint="#EF4444"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tv_destino"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Porto, Portugal"
+                    android:textSize="14sp"
+                    android:textColor="#475569"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
