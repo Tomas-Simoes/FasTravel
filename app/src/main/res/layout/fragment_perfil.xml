@@ -18,6 +18,20 @@
             android:background="@drawable/gradient_header"
             android:padding="24dp">
 
+            <!-- Setinha de voltar -->
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:clickable="true"
+                android:contentDescription="Voltar"
+                android:focusable="true"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@android:color/white" />
+
+            <!-- LinearLayout central com iniciais e nome -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -25,7 +39,6 @@
                 android:layout_centerInParent="true"
                 android:gravity="center">
 
-                <!-- Círculo com Iniciais -->
                 <TextView
                     android:id="@+id/text_iniciais_usuario"
                     android:layout_width="100dp"
@@ -52,13 +65,14 @@
 
         </RelativeLayout>
 
+
         <!-- Conteúdo Principal -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
-            android:layout_marginTop="-10dp">
+            android:layout_marginTop="5dp">
 
             <!-- Seção Preferências -->
             <TextView
@@ -137,63 +151,6 @@
                 android:layout_marginStart="56dp"
                 android:layout_marginEnd="0dp" />
 
-            <!-- Notificações -->
-            <LinearLayout
-                android:id="@+id/layout_notifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical"
-                android:background="?attr/selectableItemBackground">
-
-                <LinearLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/circle_blue_light"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/ic_notifications"
-                        app:tint="@color/primary_blue" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notificações"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Receber alertas e atualizações"
-                        android:textSize="13sp"
-                        android:layout_marginTop="2dp"
-                        android:textColor="@color/text_secondary" />
-
-                </LinearLayout>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_notifications"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:thumbTint="@color/switch_thumb"
-                    app:trackTint="@color/switch_track" />
-
-            </LinearLayout>
 
             <!-- Divider -->
             <View
