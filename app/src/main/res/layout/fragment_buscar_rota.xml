@@ -446,7 +446,6 @@
                                     android:id="@+id/text_subtitulo_casa"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/text_subtitulo_casa"
                                     android:text="Adicionar"
                                     android:textSize="10sp"
                                     android:textColor="?attr/colorPrimary"
