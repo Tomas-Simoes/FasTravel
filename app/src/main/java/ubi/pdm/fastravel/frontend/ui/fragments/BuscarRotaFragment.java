@@ -437,7 +437,6 @@ public class BuscarRotaFragment extends Fragment {
             requestRoute(pontoA, pontoB, mode, transitMode, null);
             bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
-            //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED); houve um conflito no commit e não sei qual dos dois é o certo
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
 
