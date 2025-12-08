@@ -54,43 +54,50 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         }
         holder.tvTitulo.setText(titulo.toString());
 
-        StringBuilder tempo = new StringBuilder();
+        StringBuilder tempoPartida = new StringBuilder();
         if (r.departureTimeText != null && !r.departureTimeText.isEmpty()) {
-            tempo.append("Partida ").append(r.departureTimeText);
+            tempoPartida.append("Partida ").append(r.departureTimeText);
         }
+        StringBuilder tempoChegada = new StringBuilder();
         if (r.arrivalTimeText != null && !r.arrivalTimeText.isEmpty()) {
-            if (tempo.length() > 0) tempo.append(" • ");
-            tempo.append("Chegada ").append(r.arrivalTimeText);
+            if (tempoChegada.length() > 0) tempoChegada.append(" • ");
+            tempoChegada.append("Chegada ").append(r.arrivalTimeText);
         }
-        holder.tvTempo.setText(tempo.toString());
-
-        if (!r.itineraryLines.isEmpty()) {
-            StringBuilder sub = new StringBuilder();
-            for (int i = 0; i < r.itineraryLines.size() && i < 3; i++) {
-                if (i > 0) sub.append("\n");
-                sub.append("• ").append(r.itineraryLines.get(i));
-            }
-            holder.tvItinerario.setText(sub.toString());
-        } else {
-            holder.tvItinerario.setText("Itinerário detalhado indisponível.");
-        }
+        holder.tvChegada.setText(tempoChegada.toString());
+        holder.tvPartida.setText(tempoPartida.toString());
 
         int iconRes;
+
         if (r.hasTransit) {
             String type = r.primaryVehicleType != null ? r.primaryVehicleType : "";
+
             if (type.contains("BUS")) {
                 iconRes = R.drawable.ic_bus;
+
             } else if (type.contains("RAIL") || type.contains("TRAIN")) {
                 iconRes = R.drawable.ic_train;
+
             } else if (type.contains("SUBWAY") || type.contains("METRO")) {
-                iconRes = R.drawable.ic_bus;
+                iconRes = R.drawable.ic_train;
+
             } else if (type.contains("TRAM")) {
-                iconRes = R.drawable.ic_bus;
+                iconRes = R.drawable.ic_tram;
+
             } else {
                 iconRes = R.drawable.ic_navigation;
             }
+
         } else {
-            iconRes = R.drawable.ic_car;
+
+            if ("walking".equalsIgnoreCase(r.mode)) {
+                iconRes = R.drawable.ic_walk;
+
+            } else if ("bicycling".equalsIgnoreCase(r.mode)) {
+                iconRes = R.drawable.ic_bike;
+
+            } else {
+                iconRes = R.drawable.ic_car;
+            }
         }
 
         holder.ivMode.setImageResource(iconRes);
@@ -111,16 +118,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         MaterialCardView card;
         ImageView ivMode;
         TextView tvTitulo;
-        TextView tvTempo;
-        TextView tvItinerario;
+        TextView tvPartida, tvChegada;
 
         RouteViewHolder(@NonNull View itemView) {
             super(itemView);
             card = (MaterialCardView) itemView;
             ivMode = itemView.findViewById(R.id.iv_mode);
             tvTitulo = itemView.findViewById(R.id.tv_titulo);
-            tvTempo = itemView.findViewById(R.id.tv_tempo);
-            tvItinerario = itemView.findViewById(R.id.tv_itinerario);
+            tvPartida = itemView.findViewById(R.id.tv_partida);
+            tvChegada = itemView.findViewById(R.id.tv_chegada);
         }
     }
 }

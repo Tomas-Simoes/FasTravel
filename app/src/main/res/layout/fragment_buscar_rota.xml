@@ -104,6 +104,115 @@
         </FrameLayout>
     </FrameLayout>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="0dp"
+        android:backgroundTint="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/navigation_gradient_bg"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/nav_icon_background">
+
+                    <ImageView
+                        android:id="@+id/iv_nav_direction"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_navigation_arrow"
+                        android:tint="#FFFFFF" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Próxima direção"
+                        android:textSize="12sp"
+                        android:textColor="#64748B"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="2dp" />
+
+                    <TextView
+                        android:id="@+id/tv_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Em 200 m"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#0F172A"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_nav_instruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vire à direita na Rua da República"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#0F172A"
+                android:fontFamily="sans-serif-medium"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/nav_info_background"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_info"
+                    android:tint="#3B82F6"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tv_nav_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Depois continue em frente por 500 m"
+                    android:textSize="13sp"
+                    android:textColor="#475569"
+                    android:fontFamily="sans-serif" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
 
     <!-- Bottom Sheet moderno -->
     <com.google.android.material.card.MaterialCardView
