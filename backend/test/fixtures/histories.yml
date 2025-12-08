@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  origin: MyString
+  destiny: MyString
+  travel_date: 2025-12-08
+  user: one
+
+two:
+  origin: MyString
+  destiny: MyString
+  travel_date: 2025-12-08
+  user: two

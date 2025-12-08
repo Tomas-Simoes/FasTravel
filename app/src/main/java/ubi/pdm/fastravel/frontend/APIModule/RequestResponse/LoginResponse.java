@@ -6,3 +6,4 @@ public class LoginResponse {
     public String token;
     public UserData user;
 }
+

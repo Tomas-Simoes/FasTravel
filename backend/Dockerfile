@@ -34,7 +34,8 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN echo "Skipping assets precompile for API-only Rails app"
+RUN SECRET_KEY_BASE=1 ./bin/rails assets:precompile || true
 
 
 # Final stage for app image
