@@ -198,7 +198,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="github.com/tomasimoes"
+                        android:text="github.com/tomas-simoes"
                         android:textSize="14sp"
                         android:layout_marginStart="12dp"
                         android:textColor="@color/primary_blue" />
@@ -307,7 +307,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="github.com/leonardocasanova"
+                        android:text="github.com/leorcf"
                         android:textSize="14sp"
                         android:layout_marginStart="12dp"
                         android:textColor="@color/primary_blue" />
@@ -416,7 +416,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="github.com/rafaelgomes"
+                        android:text="github.com/Rafasta236"
                         android:textSize="14sp"
                         android:layout_marginStart="12dp"
                         android:textColor="@color/primary_blue" />
