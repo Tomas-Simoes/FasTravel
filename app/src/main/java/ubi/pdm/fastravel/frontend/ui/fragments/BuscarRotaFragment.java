@@ -84,6 +84,9 @@ import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
 =======
 import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
 import ubi.pdm.fastravel.frontend.util.RouteAdapter;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 public class BuscarRotaFragment extends Fragment {
