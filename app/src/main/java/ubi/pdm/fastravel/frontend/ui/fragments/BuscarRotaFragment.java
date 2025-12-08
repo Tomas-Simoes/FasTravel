@@ -160,27 +160,21 @@ public class BuscarRotaFragment extends Fragment {
                         List<String> places = Arrays.asList(fullPath.split("  →  "));
 
                         if (places.size() >= 2) {
-                            // 1. Define os pontos chave da rota temática
-                            String originalOrigin = places.get(0); // A origem da rota temática (agora o 1º waypoint)
+                            String originalOrigin = places.get(0);
                             String destination = places.get(places.size() - 1);
 
-                            // 2. Waypoints interiores (se existirem)
                             List<String> originalInnerWaypoints = new ArrayList<>();
                             if (places.size() > 2) {
-                                // Pega os stops entre a origem e o destino
                                 originalInnerWaypoints.addAll(places.subList(1, places.size() - 1));
                             }
 
-                            // Lista de waypoints com a ORIGEM ORIGINAL no início
                             List<String> waypointsWithOriginalOriginAsFirst = new ArrayList<>();
                             waypointsWithOriginalOriginAsFirst.add(originalOrigin);
                             waypointsWithOriginalOriginAsFirst.addAll(originalInnerWaypoints);
 
-                            // 3. Verifica a Permissão de Localização
                             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                                // ❌ Permissão Negada: Reverte para a origem original da rota temática
-                                Toast.makeText(getContext(), "Permissão de localização negada. A usar a origem original da rota.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Location permission denied. Using original route origin.", Toast.LENGTH_LONG).show();
 
                                 inputPontoA.setText(originalOrigin);
                                 inputPontoB.setText(destination);
@@ -190,7 +184,7 @@ public class BuscarRotaFragment extends Fragment {
                                         destination,
                                         "driving",
                                         null,
-                                        originalInnerWaypoints // Sem a origem original
+                                        originalInnerWaypoints
                                 );
                                 return;
                             }
@@ -202,23 +196,17 @@ public class BuscarRotaFragment extends Fragment {
 
                                 if (location != null) {
                                     finalOrigin = location.getLatitude() + "," + location.getLongitude();
-
-                                    // O primeiro waypoint é o ponto de partida original da rota
                                     finalWaypoints = waypointsWithOriginalOriginAsFirst;
-
-                                    // NOTA: Pode usar um String Resource como R.string.my_location
-                                    originDisplayText = "Sua Localização Atual";
+                                    originDisplayText = "Your Current Location";
 
                                 } else {
-                                    // ⚠️ Falha Temporária (ex: GPS desligado): Reverte para a origem original
-                                    Toast.makeText(getContext(), "Não foi possível obter a sua localização. A usar a origem original da rota.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), "Could not get your location. Using original route origin.", Toast.LENGTH_LONG).show();
 
                                     finalOrigin = originalOrigin;
                                     finalWaypoints = originalInnerWaypoints;
                                     originDisplayText = originalOrigin;
                                 }
 
-                                // 5. Atualiza UI e chama a rota
                                 inputPontoA.setText(originDisplayText);
                                 inputPontoB.setText(destination);
 
@@ -230,8 +218,7 @@ public class BuscarRotaFragment extends Fragment {
                                         finalWaypoints
                                 );
                             }).addOnFailureListener(e -> {
-                                // ❌ Falha Assíncrona: Reverte para a origem original
-                                Toast.makeText(getContext(), "Erro ao obter localização. A usar a origem original da rota.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Error getting location. Using original route origin.", Toast.LENGTH_LONG).show();
 
                                 inputPontoA.setText(originalOrigin);
                                 inputPontoB.setText(destination);
@@ -289,8 +276,6 @@ public class BuscarRotaFragment extends Fragment {
         );
 
         favoritesManager.init();
-
-
 
         String[] parts = userData.name.trim().split("\\s+");
         StringBuilder initials = new StringBuilder();
@@ -372,7 +357,7 @@ public class BuscarRotaFragment extends Fragment {
 
                         if (prediction == null) {
                             Toast.makeText(requireContext(),
-                                    "Não foi possível obter o local selecionado",
+                                    "Could not get selected location",
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -420,7 +405,7 @@ public class BuscarRotaFragment extends Fragment {
                                 inputPontoB.setText(displayText);
                             }
                         }).addOnFailureListener(e -> {
-                            String msg = "Erro ao obter detalhes do local";
+                            String msg = "Error getting place details";
                             if (e instanceof ApiException) {
                                 msg += ": " + ((ApiException) e).getStatusCode();
                             }
@@ -430,7 +415,7 @@ public class BuscarRotaFragment extends Fragment {
                     } else if (result.getResultCode() == PlaceAutocompleteActivity.RESULT_ERROR && data != null) {
                         Status status = PlaceAutocomplete.getResultStatusFromIntent(data);
                         Toast.makeText(requireContext(),
-                                "Erro no autocomplete: " + status.getStatusMessage(),
+                                "Autocomplete error: " + status.getStatusMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -440,7 +425,7 @@ public class BuscarRotaFragment extends Fragment {
     private void showTurnByTurnDirections(RouteInfo route) {
         if (route.itineraryLines == null || route.itineraryLines.isEmpty()) {
             Toast.makeText(requireContext(),
-                    "Sem instruções detalhadas para esta rota",
+                    "No detailed instructions for this route",
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -454,7 +439,7 @@ public class BuscarRotaFragment extends Fragment {
         }
 
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Direções passo a passo")
+                .setTitle("Turn-by-turn directions")
                 .setMessage(sb.toString().trim())
                 .setPositiveButton("OK", null)
                 .show();
@@ -503,7 +488,7 @@ public class BuscarRotaFragment extends Fragment {
 
                 requireActivity().runOnUiThread(() -> {
                     if (routes.isEmpty()) {
-                        Toast.makeText(requireContext(), "Nenhuma rota encontrada", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "No route found", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -527,7 +512,7 @@ public class BuscarRotaFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(requireContext(), "Erro ao obter rota", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(requireContext(), "Error getting route", Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
@@ -545,7 +530,7 @@ public class BuscarRotaFragment extends Fragment {
             RouteInfo info = new RouteInfo();
             info.mode = mode;
 
-            info.summary = routeObj.optString("summary", "Rota " + (i + 1));
+            info.summary = routeObj.optString("summary", "Route " + (i + 1));
 
             JSONObject overviewPolyline = routeObj.getJSONObject("overview_polyline");
             String points = overviewPolyline.getString("points");
@@ -577,7 +562,7 @@ public class BuscarRotaFragment extends Fragment {
                         if (transitDetails.has("line")) {
                             JSONObject line = transitDetails.getJSONObject("line");
                             lineName = line.optString("short_name",
-                                    line.optString("name", "Linha"));
+                                    line.optString("name", "Line"));
 
                             JSONObject vehicle = line.optJSONObject("vehicle");
                             if (vehicle != null) {
@@ -590,16 +575,16 @@ public class BuscarRotaFragment extends Fragment {
 
                         info.hasTransit = true;
 
-                        String depStop = transitDetails.getJSONObject("departure_stop").optString("name", "Paragem origem");
-                        String arrStop = transitDetails.getJSONObject("arrival_stop").optString("name", "Paragem destino");
+                        String depStop = transitDetails.getJSONObject("departure_stop").optString("name", "Departure stop");
+                        String arrStop = transitDetails.getJSONObject("arrival_stop").optString("name", "Arrival stop");
                         int numStops = transitDetails.optInt("num_stops", -1);
 
                         StringBuilder sb = new StringBuilder();
-                        sb.append("Apanhar ").append(lineName)
-                                .append(" em ").append(depStop)
-                                .append(" → sair em ").append(arrStop);
+                        sb.append("Take ").append(lineName)
+                                .append(" at ").append(depStop)
+                                .append(" → get off at ").append(arrStop);
                         if (numStops >= 0) {
-                            sb.append(" (").append(numStops).append(" paragens)");
+                            sb.append(" (").append(numStops).append(" stops)");
                         }
 
                         info.itineraryLines.add(sb.toString());
@@ -650,7 +635,7 @@ public class BuscarRotaFragment extends Fragment {
                 .append("&mode=").append(mode)
                 .append("&alternatives=true");
 
-        params.append("&language=pt-PT");
+        params.append("&language=en");
         if (waypoints != null && !waypoints.isEmpty()) {
             params.append("&waypoints=");
             for (int i = 0; i < waypoints.size(); i++) {
@@ -673,7 +658,7 @@ public class BuscarRotaFragment extends Fragment {
 
     private void drawRoute(List<LatLng> routePoints) {
         if (map == null || routePoints == null || routePoints.isEmpty()) {
-            Toast.makeText(requireContext(), "Não foi possível desenhar a rota", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Could not draw route", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -737,7 +722,7 @@ public class BuscarRotaFragment extends Fragment {
         if (code == REQ_LOC && res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED) {
             enableMyLocationAndCenter();
         } else {
-            Toast.makeText(requireContext(), "Permissão de localização negada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -825,21 +810,21 @@ public class BuscarRotaFragment extends Fragment {
             String distanceText;
 
             if (currentDistanceToEndMeters < 0) {
-                distanceText = "A calcular…";
+                distanceText = "Calculating…";
 
             } else if (currentDistanceToEndMeters < 25) {
-                distanceText = "Agora";
+                distanceText = "Now";
 
             } else if (currentDistanceToEndMeters < 1000) {
                 int m = Math.round(currentDistanceToEndMeters);
-                distanceText = "Em " + m + " m";
+                distanceText = "In " + m + " m";
 
             } else if (currentDistanceToEndMeters < 5000) {
                 float km = currentDistanceToEndMeters / 1000f;
-                distanceText = String.format("Em %.1f km", km);
+                distanceText = String.format("In %.1f km", km);
 
             } else {
-                distanceText = "Continuar em frente";
+                distanceText = "Continue straight";
             }
 
             tvNavDistance.setText(distanceText);
@@ -848,9 +833,9 @@ public class BuscarRotaFragment extends Fragment {
         if (tvNavDetail != null) {
             if (currentNavStepIndex < currentNavSteps.size() - 1) {
                 RouteInfo.NavStep nextStep = currentNavSteps.get(currentNavStepIndex + 1);
-                tvNavDetail.setText("Depois: " + nextStep.instruction);
+                tvNavDetail.setText("Next: " + nextStep.instruction);
             } else {
-                tvNavDetail.setText("Este é o último passo antes do destino.");
+                tvNavDetail.setText("This is the last step before destination.");
             }
         }
 
@@ -889,7 +874,7 @@ public class BuscarRotaFragment extends Fragment {
                 currentDistanceToEndMeters = -1f;
                 updateNavInstructionUI();
             } else {
-                Toast.makeText(requireContext(), "Chegaste ao destino!", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "You have arrived at your destination!", Toast.LENGTH_LONG).show();
                 stopNavigation();
             }
         }
@@ -933,10 +918,10 @@ public class BuscarRotaFragment extends Fragment {
 
                 getActivity().runOnUiThread(() -> {
                     if (history != null) {
-                        Toast.makeText(getContext(), "Guardado com sucesso!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Saved successfully!", Toast.LENGTH_SHORT).show();
                     } else {
                         String errorMessage = repo.getLastErrorMessage();
-                        Toast.makeText(getContext(), "Erro: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
             }).start();
@@ -947,7 +932,7 @@ public class BuscarRotaFragment extends Fragment {
 
     private void startNavigation(RouteInfo route) {
         if (route.navSteps == null || route.navSteps.isEmpty()) {
-            Toast.makeText(requireContext(), "Sem passos de navegação para esta rota", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "No navigation steps for this route", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -985,7 +970,7 @@ public class BuscarRotaFragment extends Fragment {
 
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(requireContext(), "Sem permissão de localização para navegação", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "No location permission for navigation", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -1065,7 +1050,7 @@ public class BuscarRotaFragment extends Fragment {
             originLatLng = destLatLng;
             destLatLng = tempLatLng;
 
-            Toast.makeText(requireContext(), "Origem e destino trocados", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Origin and destination swapped", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -1078,7 +1063,7 @@ public class BuscarRotaFragment extends Fragment {
 
             if (pontoA.isEmpty() || pontoB.isEmpty()) {
                 Toast.makeText(getContext(),
-                        "Escolhe origem e destino primeiro",
+                        "Choose origin and destination first",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -1087,36 +1072,36 @@ public class BuscarRotaFragment extends Fragment {
 
             String mode = "driving";
             String transitMode = null;
-            String modoLabel = "Carro";
+            String modoLabel = "Car";
 
             if (checkedId == R.id.chip_pe) {
                 mode = "walking";
                 transitMode = null;
-                modoLabel = "A pé";
+                modoLabel = "Walking";
 
             } else if (checkedId == R.id.chip_comboio) {
                 mode = "transit";
                 transitMode = "train";
-                modoLabel = "Comboio";
+                modoLabel = "Train";
 
             } else if (checkedId == R.id.chip_bicicleta) {
                 mode = "bicycling";
                 transitMode = null;
-                modoLabel = "Bicicleta";
+                modoLabel = "Bicycle";
 
             } else if (checkedId == R.id.chip_autocarro) {
                 mode = "transit";
                 transitMode = "bus";
-                modoLabel = "Autocarro";
+                modoLabel = "Bus";
 
             } else if (checkedId == R.id.chip_carro) {
                 mode = "driving";
                 transitMode = null;
-                modoLabel = "Carro";
+                modoLabel = "Car";
             }
 
             Toast.makeText(getContext(),
-                    "A calcular rota de " + pontoA + " para " + pontoB + " via " + modoLabel,
+                    "Calculating route from " + pontoA + " to " + pontoB + " via " + modoLabel,
                     Toast.LENGTH_SHORT).show();
 
             requestRoute(pontoA, pontoB, mode, transitMode, null);

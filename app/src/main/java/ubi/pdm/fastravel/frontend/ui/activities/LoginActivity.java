@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
 
             if (email.isEmpty() || senha.isEmpty()) {
-                Toast.makeText(this, "Preenche todos os campos.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -73,13 +73,12 @@ public class LoginActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (user != null) {
-                        Toast.makeText(this, "Bem-vindo " + user.name, Toast.LENGTH_SHORT).show();
-                        // Retorna RESULT_OK para o MainActivity
+                        Toast.makeText(this, "Welcome " + user.name, Toast.LENGTH_SHORT).show();
                         Intent data = new Intent();
                         setResult(RESULT_OK, data);
-                        finish(); // fecha LoginActivity
+                        finish();
                     } else {
-                        Toast.makeText(this, "Credenciais inválidas.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Invalid credentials.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }).start();
@@ -100,16 +99,15 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            Toast.makeText(this, "Bem-vindo " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
 
-            // Retorna RESULT_OK para MainActivity
             Intent data = new Intent();
             setResult(RESULT_OK, data);
-            finish(); // fecha LoginActivity
+            finish();
 
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(this, "Erro no login Google.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Google login failed.", Toast.LENGTH_SHORT).show();
         }
     }
 }

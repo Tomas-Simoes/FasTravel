@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Criar Conta FasTravel"
+            android:text="Create FasTravel Account"
             android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
@@ -43,7 +43,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nome Completo"
+                    android:hint="Full Name"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="12dp">
 
@@ -73,7 +73,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Palavra-passe"
+                    android:hint="Password"
                     app:endIconMode="password_toggle"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -89,12 +89,13 @@
                     android:id="@+id/btn_registar"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:text="Registar"
+                    android:text="Register"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp"
                     android:layout_marginTop="24dp"
-                    app:backgroundTint="#2196F3"/> </LinearLayout>
+                    app:backgroundTint="#2196F3"/>
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
@@ -113,7 +114,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ou continua com"
+                android:text="Or continue with"
                 android:paddingHorizontal="16dp"
                 android:textColor="#757575"/>
 
@@ -137,6 +138,7 @@
             app:iconTint="@null"
             app:iconGravity="textStart"
             android:layout_marginBottom="32dp"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,14 +147,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Já tens conta? "
+                android:text="Already have an account? "
                 android:textColor="#757575"/>
 
             <TextView
                 android:id="@+id/text_ir_para_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Entrar"
+                android:text="Login"
                 android:textStyle="bold"
                 android:textColor="#2196F3"
                 android:clickable="true"

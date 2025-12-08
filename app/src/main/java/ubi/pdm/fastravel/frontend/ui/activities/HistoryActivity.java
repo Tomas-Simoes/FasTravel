@@ -35,57 +35,44 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        // Initialize Repository
         historyRepo = new HistoryRepository(this);
 
-        // Initialize Views
         btnBack = findViewById(R.id.btn_back);
         recyclerView = findViewById(R.id.recycler_historico);
         progressBar = findViewById(R.id.progress_bar);
         emptyState = findViewById(R.id.empty_state);
 
-        // Back Button
         btnBack.setOnClickListener(v -> onBackPressed());
 
-        // Configure RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Load History
         loadHistory();
     }
 
     private void loadHistory() {
-        // Show loading
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         emptyState.setVisibility(View.GONE);
 
         new Thread(() -> {
-            // Fetch histories from cache or API
             List<UserHistory> histories = historyRepo.getHistoriesFromCacheOrApi();
 
             runOnUiThread(() -> {
                 progressBar.setVisibility(View.GONE);
 
                 if (histories != null && !histories.isEmpty()) {
-                    // Convert UserHistory to HistoryEntry
                     List<HistoryEntry> historyEntries = convertToHistoryEntries(histories);
 
-                    // Set adapter
                     adapter = new HistoryController(this, historyEntries);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(View.VISIBLE);
                 } else {
-                    // Show empty state
                     emptyState.setVisibility(View.VISIBLE);
                 }
             });
         }).start();
     }
 
-    /**
-     * Converte UserHistory (do backend) para HistoryEntry (para UI)
-     */
     private List<HistoryEntry> convertToHistoryEntries(List<UserHistory> histories) {
         List<HistoryEntry> entries = new ArrayList<>();
         int defaultIcon = android.R.drawable.ic_menu_directions;
@@ -93,10 +80,10 @@ public class HistoryActivity extends AppCompatActivity {
         for (UserHistory history : histories) {
             HistoryEntry entry = new HistoryEntry(
                     history.id,
-                    formatDate(history.travel_date),  // Data formatada
-                    "",                                // Duration removida
-                    "",                                // Hora início removida
-                    "",                                // Hora fim removida
+                    formatDate(history.travel_date),
+                    "",
+                    "",
+                    "",
                     history.origin,
                     history.destiny,
                     defaultIcon
@@ -107,9 +94,6 @@ public class HistoryActivity extends AppCompatActivity {
         return entries;
     }
 
-    /**
-     * Formata a data do formato "2024-12-08" para "8 de Dezembro, 2024"
-     */
     private String formatDate(String dateString) {
         try {
             String[] parts = dateString.split("-");
@@ -127,9 +111,6 @@ public class HistoryActivity extends AppCompatActivity {
         return dateString;
     }
 
-    /**
-     * Retorna o nome do mês em português
-     */
     private String getMonthName(int month) {
         String[] months = {
                 "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -144,7 +125,6 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Recarregar quando voltar à activity
         loadHistory();
     }
 }

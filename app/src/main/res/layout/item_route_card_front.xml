@@ -16,7 +16,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Imagem da rota (ocupa metade superior do card) -->
         <ImageView
             android:id="@+id/routeImage"
             android:layout_width="match_parent"
@@ -25,7 +24,6 @@
             android:scaleType="centerCrop"
             android:contentDescription="Route image" />
 
-        <!-- Área colorida com texto (metade inferior) -->
         <LinearLayout
             android:id="@+id/coloredSection"
             android:layout_width="match_parent"

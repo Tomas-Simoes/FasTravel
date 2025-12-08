@@ -2,7 +2,6 @@ package ubi.pdm.fastravel.frontend;
 
 public class CalcularCO2 {
 
-    // g de CO2 por KM
     public static final double CARRO = 120;
     public static final double BUS = 80;
     public static final double COMBOIO = 30;
@@ -13,7 +12,6 @@ public class CalcularCO2 {
         return meters / 1000.0;
     }
 
-    // Calcula CO2
     public static double calculateSegmentCO2(String mode, double distanceMeters) {
         double km = metersToKm(distanceMeters);
 

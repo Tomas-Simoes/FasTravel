@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity; // MUDANÇA: Estende AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,10 +25,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import ubi.pdm.fastravel.R;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserData;
 import ubi.pdm.fastravel.frontend.DataPersistenceModule.User.UserRepository;
-import ubi.pdm.fastravel.frontend.ui.fragments.BuscarRotaFragment;
-// Importar a LoginActivity para navegação
-// import ubi.pdm.fastravel.frontend.ui.activities.LoginActivity;
-// import ubi.pdm.fastravel.frontend.ui.activities.MainActivity; // Assumindo que esta é a próxima Activity
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -48,11 +44,10 @@ public class RegisterActivity extends AppCompatActivity {
     );
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) { // 2. Mudar onCreateView para onCreate
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_register); // 3. Carregar o layout
+        setContentView(R.layout.fragment_register);
 
-        // 4. Inicializar Views (agora usando findViewById diretamente)
         etNome = findViewById(R.id.et_nome_registo);
         etEmail = findViewById(R.id.et_email_registo);
         etSenha = findViewById(R.id.et_senha_registo);
@@ -60,11 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
         btnGoogle = findViewById(R.id.btn_google_sign_in);
         textIrLogin = findViewById(R.id.text_ir_para_login);
 
-        // 5. Configurar Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        // Usamos 'this' como Contexto
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         btnRegistar.setOnClickListener(v -> {
@@ -84,24 +77,19 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(this, "Welcome " + user.name, Toast.LENGTH_SHORT).show();
                         navigateToNextActivity();
                     } else {
-                        String errorMessage = repo.getLastErrorMessage(); // Implementa isto para guardar o erro do servidor
-                        Toast.makeText(this, "Register failed: " + errorMessage, Toast.LENGTH_SHORT).show();                    }
+                        String errorMessage = repo.getLastErrorMessage();
+                        Toast.makeText(this, "Registration failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
                 });
             }).start();
         });
 
-
-        // 7. Botão Google
         btnGoogle.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
         });
 
-        // 8. Link "Entrar" (NAVEGAÇÃO PARA LOGIN)
-        textIrLogin.setOnClickListener(v -> {
-            // Navegar para LoginActivity usando Intent
-            navigateToLoginActivity();
-        });
+        textIrLogin.setOnClickListener(v -> navigateToLoginActivity());
     }
 
     private boolean validarCampos() {
@@ -110,16 +98,15 @@ public class RegisterActivity extends AppCompatActivity {
         String senha = etSenha.getText().toString().trim();
 
         if (nome.isEmpty()) {
-            etNome.setError("Nome obrigatório");
+            etNome.setError("Name is required");
             return false;
         }
-        // Usamos this. para o contexto em vez de getContext()
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Email inválido");
+            etEmail.setError("Invalid email");
             return false;
         }
         if (senha.isEmpty() || senha.length() < 6) {
-            etSenha.setError("A senha precisa de 6 caracteres");
+            etSenha.setError("Password must be at least 6 characters");
             return false;
         }
         return true;
@@ -130,23 +117,17 @@ public class RegisterActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(this, "Welcome " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpa o back stack
-            startActivity(intent);
-            finish();
+            navigateToNextActivity();
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(this, "Erro no login Google", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // --- Métodos de Navegação ---
-
     private void navigateToLoginActivity() {
-        // Redireciona para a LoginActivity
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
-        finish(); // Termina RegisterActivity se não quiser que o utilizador volte a ela facilmente
+        finish();
     }
 
     private void navigateToNextActivity() {
@@ -156,10 +137,9 @@ public class RegisterActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        // Navega para o fragment BuscarRotaFragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new BuscarRotaFragment())
-                .commit();
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
-
 }

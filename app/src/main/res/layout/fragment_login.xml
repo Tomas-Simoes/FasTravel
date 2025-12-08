@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bem-vindo de volta"
+            android:text="Welcome Back"
             android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
@@ -55,7 +55,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Palavra-passe"
+                    android:hint="Password"
                     app:endIconMode="password_toggle"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -70,7 +70,7 @@
                     android:id="@+id/btn_entrar"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:text="Entrar"
+                    android:text="Login"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp"
@@ -94,7 +94,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ou entrar com"
+                android:text="Or continue with"
                 android:paddingHorizontal="16dp"
                 android:textColor="#757575"/>
             <View
@@ -125,13 +125,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Não tens conta? "
+                android:text="Don't have an account? "
                 android:textColor="#757575"/>
             <TextView
                 android:id="@+id/text_ir_para_registo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Criar Conta"
+                android:text="Create Account"
                 android:textStyle="bold"
                 android:textColor="#2196F3"
                 android:clickable="true"

@@ -34,35 +34,27 @@ public class ThemedRoutesActivity extends AppCompatActivity {
     private static final String TAG = "ThemedRoutesFragment";
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
 
-
-    // Default: Porto, Portugal in case GPS fails
     private static final double DEFAULT_LAT = 41.1579;
     private static final double DEFAULT_LNG = -8.6291;
 
-
-    // UI Components
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView tvLoading;
     private TextView tvError;
 
-    // Data
     private List<ThemedRoute> themedRoutes = new ArrayList<>();
     private ThemedRoutesController adapter;
 
-    // Services
     private ThemedRoutesService routesService;
     private FusedLocationProviderClient fusedLocationClient;
 
-    // Location
     private double userLat = DEFAULT_LAT;
     private double userLng = DEFAULT_LNG;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_themedroutes); // Assumindo que o nome do layout é mantido
+        setContentView(R.layout.fragment_themedroutes);
 
         ImageButton btnBack = findViewById(R.id.btnBack);
         recyclerView = findViewById(R.id.routesRecycler);
@@ -90,9 +82,8 @@ public class ThemedRoutesActivity extends AppCompatActivity {
             @Override
             public void onLearnMore(ThemedRoute r) {
                 Toast.makeText(ThemedRoutesActivity.this,
-                        "Detalhes: " + r.getTitle(),
+                        "Details: " + r.getTitle(),
                         Toast.LENGTH_SHORT).show();
-                // TODO: Mostrar bottomsheet com detalhes completos da rota
             }
         };
 
@@ -156,7 +147,6 @@ public class ThemedRoutesActivity extends AppCompatActivity {
 
                 int successCount = 0;
 
-                // Process each result
                 for (ThemedRoutesService.RouteResult result : results) {
                     if (result.success && result.places != null && !result.places.isEmpty()) {
                         ThemedRoute route = createRouteFromPlaces(result.type, result.places);
@@ -218,9 +208,9 @@ public class ThemedRoutesActivity extends AppCompatActivity {
         String time = calculateTotalTime(places);
 
         return new ThemedRoute(
-                type.getDisplayName(),     // title
-                getColorForType(type),     // color
-                getImageForType(type),     // image resource
+                type.getDisplayName(),
+                getColorForType(type),
+                getImageForType(type),
                 photoUrl,
                 distance,
                 time,
@@ -230,7 +220,7 @@ public class ThemedRoutesActivity extends AppCompatActivity {
 
     private String calculateTotalTime(List<ThemedRoutesService.Place> places) {
         int stops = places.size();
-        int minutes = (stops * 12) + ((stops - 1) * 8); // podes mudar o modelo
+        int minutes = (stops * 12) + ((stops - 1) * 8);
 
         int h = minutes / 60;
         int m = minutes % 60;
@@ -242,7 +232,7 @@ public class ThemedRoutesActivity extends AppCompatActivity {
     }
 
     private String buildPathDescription(List<ThemedRoutesService.Place> places) {
-        if (places.isEmpty()) return "Nenhum ponto encontrado.";
+        if (places.isEmpty()) return "No points found.";
 
         StringBuilder path = new StringBuilder();
 
@@ -250,7 +240,7 @@ public class ThemedRoutesActivity extends AppCompatActivity {
             path.append(places.get(i).name);
 
             if (i < places.size() - 1) {
-                path.append("  →  "); // seta bonita
+                path.append("  →  ");
             }
         }
 
@@ -274,21 +264,21 @@ public class ThemedRoutesActivity extends AppCompatActivity {
     private double distanceBetween(ThemedRoutesService.Place a, ThemedRoutesService.Place b) {
         float[] result = new float[1];
         Location.distanceBetween(a.lat, a.lng, b.lat, b.lng, result);
-        return result[0]; // metros
+        return result[0];
     }
 
     private String getColorForType(ThemedRoutesService.RouteType type) {
         switch (type) {
             case CULTURAL:
-                return "#E91E63"; // Rosa/Magenta
+                return "#E91E63";
             case HISTORICAL:
-                return "#FF6F00"; // Laranja
+                return "#FF6F00";
             case GREEN:
-                return "#2E7D32"; // Verde
+                return "#2E7D32";
             case GASTRONOMIC:
-                return "#1565C0"; // Azul
+                return "#1565C0";
             default:
-                return "#1565C0"; // Azul
+                return "#1565C0";
         }
     }
 
@@ -331,11 +321,9 @@ public class ThemedRoutesActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permissão concedida, tenta obter a localização e rotas novamente
                 getLocationAndFetchRoutes();
             } else {
-                // Permissão negada, continua com a localização padrão
-                Toast.makeText(this, "Permissão de localização negada. Usando localização padrão (Porto).", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Location permission denied. Using default location (Porto).", Toast.LENGTH_LONG).show();
                 fetchAllRoutes();
             }
         }

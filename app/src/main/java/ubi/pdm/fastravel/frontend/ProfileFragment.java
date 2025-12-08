@@ -21,20 +21,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
-        /*
-        TextView btnEdit = view.findViewById(R.id.btn_edit);
-        TextView btnPreferences = view.findViewById(R.id.btn_preferences);
-        TextView btnLogout = view.findViewById(R.id.btn_logout);
-
-        btnEdit.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Edit Profile", Toast.LENGTH_SHORT).show());
-
-        btnPreferences.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Preferences", Toast.LENGTH_SHORT).show());
-
-        btnLogout.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Logout", Toast.LENGTH_SHORT).show());
-*/
         return view;
     }
 }

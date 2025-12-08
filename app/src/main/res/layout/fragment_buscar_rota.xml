@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Mapa full screen com gradiente overlay + FAB -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,7 +17,6 @@
             android:layout_height="match_parent" />
 
 
-        <!-- 🔹 FAB MENU AQUI DENTRO DO FRAMELAYOUT DO MAPA -->
         <FrameLayout
             android:id="@+id/menu_fab_container"
             android:layout_width="wrap_content"
@@ -277,7 +275,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <!-- Ponto A -->
                             <LinearLayout
                                 android:id="@+id/til_ponto_a"
                                 android:layout_width="match_parent"
@@ -316,7 +313,6 @@
                                     android:inputType="text" />
                             </LinearLayout>
 
-                            <!-- Divider -->
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
@@ -324,7 +320,6 @@
                                 android:background="?attr/colorOutline"
                                 android:alpha="0.3" />
 
-                            <!-- Ponto B -->
                             <LinearLayout
                                 android:id="@+id/til_ponto_b"
                                 android:layout_width="match_parent"
@@ -365,7 +360,6 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Botão inverter redesigned -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_inverter"
                         style="@style/Widget.App.Button.Outlined"
@@ -381,7 +375,6 @@
                         app:iconGravity="start"
                         app:iconPadding="8dp" />
 
-                    <!-- Favoritos Section -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -405,7 +398,6 @@
                             android:orientation="horizontal"
                             android:paddingEnd="8dp">
 
-                            <!-- Home -->
                             <LinearLayout
                                 android:id="@+id/favorito_casa"
                                 android:layout_width="wrap_content"
@@ -452,7 +444,6 @@
                                     android:layout_marginTop="2dp" />
                             </LinearLayout>
 
-                            <!-- Work -->
                             <LinearLayout
                                 android:id="@+id/favorito_trabalho"
                                 android:layout_width="wrap_content"
