@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email_login);
         etSenha = findViewById(R.id.et_senha_login);
         btnEntrar = findViewById(R.id.btn_entrar);
-        btnGoogle = findViewById(R.id.btn_google_login);
         textIrRegisto = findViewById(R.id.text_ir_para_registo);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
