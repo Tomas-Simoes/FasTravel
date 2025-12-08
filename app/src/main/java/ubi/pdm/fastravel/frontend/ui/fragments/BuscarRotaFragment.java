@@ -76,19 +76,12 @@ import java.util.Collections;
 import java.util.List;
 
 import ubi.pdm.fastravel.R;
-<<<<<<< Updated upstream
 import ubi.pdm.fastravel.frontend.ThemedRoutesModule.ThemedRoute;
 import ubi.pdm.fastravel.frontend.ui.activities.HistoryActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.PerfilActivity;
 import ubi.pdm.fastravel.frontend.ui.activities.ThemedRoutesActivity;
-=======
 import ubi.pdm.fastravel.frontend.routes.ThemedRoute;
 import ubi.pdm.fastravel.frontend.util.RouteAdapter;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-
 public class BuscarRotaFragment extends Fragment {
 
     private TextInputEditText inputPontoA, inputPontoB;
@@ -380,7 +373,7 @@ public class BuscarRotaFragment extends Fragment {
 
                     bottomSheetScroll.post(() -> bottomSheetScroll.scrollTo(0, 0));
 
-                   // showTurnByTurnDirections(route);
+                    // showTurnByTurnDirections(route);
 
                     if (bottomSheetBehavior != null) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
