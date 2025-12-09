@@ -31,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
 
     private TextInputEditText etNome, etEmail, etSenha;
-    private MaterialButton btnRegistar, btnGoogle;
+    private MaterialButton btnRegistar;
     private TextView textIrLogin;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -52,7 +52,6 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email_registo);
         etSenha = findViewById(R.id.et_senha_registo);
         btnRegistar = findViewById(R.id.btn_registar);
-        btnGoogle = findViewById(R.id.btn_google_sign_in);
         textIrLogin = findViewById(R.id.text_ir_para_login);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -84,10 +83,6 @@ public class RegisterActivity extends AppCompatActivity {
             }).start();
         });
 
-        btnGoogle.setOnClickListener(v -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            googleSignInLauncher.launch(signInIntent);
-        });
 
         textIrLogin.setOnClickListener(v -> navigateToLoginActivity());
     }

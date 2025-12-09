@@ -11,11 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
+        android:gravity="center_horizontal|center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,47 +93,6 @@
                     app:backgroundTint="#2196F3"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#E0E0E0"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Or continue with"
-                android:paddingHorizontal="16dp"
-                android:textColor="#757575"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#E0E0E0"/>
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_google_sign_in"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Google"
-            android:textColor="@android:color/black"
-            app:backgroundTint="@android:color/white"
-            app:strokeColor="#E0E0E0"
-            app:strokeWidth="1dp"
-            app:cornerRadius="12dp"
-            app:iconTint="@null"
-            app:iconGravity="textStart"
-            android:layout_marginBottom="32dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -23,7 +22,6 @@ public class PerfilActivity extends AppCompatActivity {
     private LinearLayout btnSobre;
     private MaterialButton btnSair;
     private SwitchMaterial switchDarkMode;
-    private SwitchMaterial switchNotifications;
     private SwitchMaterial switchCo2Routes;
     private TextView textIniciaisUsuario;
     private TextView textNomeUsuario;
@@ -36,7 +34,7 @@ public class PerfilActivity extends AppCompatActivity {
         // Inicializa as views
         initViews();
 
-        // Configura as iniciais do usuário
+        // Configura o perfil do usuário
         setupUserProfile();
 
         // Configura os listeners
@@ -73,35 +71,44 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Botão Sobre
+        // Botão About
         btnSobre.setOnClickListener(v -> {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         });
 
-        // Botão Sair
+        // Botão Logout
         btnSair.setOnClickListener(v -> {
-            Toast.makeText(this, "Saindo da conta...", Toast.LENGTH_SHORT).show();
-            // Aqui podes adicionar a lógica de logout
-            // Por exemplo: Firebase.auth.signOut();
-            // finish();
+            Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
+
+            // Criar intent para MainActivity
+            Intent intent = new Intent(PerfilActivity.this, MainActivity.class);
+
+            // Limpar a pilha para evitar voltar para o perfil
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            startActivity(intent);
+
+            // Fecha a activity atual
+            finish();
         });
 
+        // Switch Dark Mode
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Toast.makeText(this, "Modo Escuro Ativado 🌙", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Dark Mode Enabled 🌙", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Modo Escuro Desativado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Dark Mode Disabled", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Switch Rotas Ecológicas
+        // Switch Eco-Friendly Routes
         switchCo2Routes.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Toast.makeText(this, "Rotas Ecológicas Ativadas 🌱", Toast.LENGTH_SHORT).show();
-                // Salvar preferência
+                Toast.makeText(this, "Eco-Friendly Routes Enabled 🌱", Toast.LENGTH_SHORT).show();
+                // Aqui podes salvar a preferência
             } else {
-                Toast.makeText(this, "Rotas Ecológicas Desativadas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Eco-Friendly Routes Disabled", Toast.LENGTH_SHORT).show();
             }
         });
     }

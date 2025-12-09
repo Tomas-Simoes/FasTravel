@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header com Gradiente -->
+        <!-- Header with Gradient -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/gradient_header"
             android:padding="24dp">
 
-            <!-- Setinha de voltar -->
+            <!-- Back Arrow -->
             <ImageView
                 android:id="@+id/btn_back"
                 android:layout_width="32dp"
@@ -26,12 +26,12 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="5dp"
                 android:clickable="true"
-                android:contentDescription="Voltar"
+                android:contentDescription="Back"
                 android:focusable="true"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="@android:color/white" />
 
-            <!-- LinearLayout central com iniciais e nome -->
+            <!-- Center LinearLayout with initials and name -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
                     android:id="@+id/text_nome_usuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="João Silva"
+                    android:text="John Smith"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:layout_marginTop="12dp"
@@ -65,8 +65,7 @@
 
         </RelativeLayout>
 
-
-        <!-- Conteúdo Principal -->
+        <!-- Main Content -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,18 +73,18 @@
             android:padding="20dp"
             android:layout_marginTop="5dp">
 
-            <!-- Seção Preferências -->
+            <!-- Preferences Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PREFERÊNCIAS"
+                android:text="PREFERENCES"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="12dp"
                 android:textColor="@color/text_secondary" />
 
-            <!-- Modo Escuro -->
+            <!-- Dark Mode -->
             <LinearLayout
                 android:id="@+id/layout_dark_mode"
                 android:layout_width="match_parent"
@@ -119,7 +118,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Modo Escuro"
+                        android:text="Dark Mode"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary" />
@@ -127,7 +126,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Aparência escura para economizar bateria"
+                        android:text="Dark appearance to save battery"
                         android:textSize="13sp"
                         android:layout_marginTop="2dp"
                         android:textColor="@color/text_secondary" />
@@ -151,7 +150,6 @@
                 android:layout_marginStart="56dp"
                 android:layout_marginEnd="0dp" />
 
-
             <!-- Divider -->
             <View
                 android:layout_width="match_parent"
@@ -160,7 +158,7 @@
                 android:layout_marginStart="56dp"
                 android:layout_marginEnd="0dp" />
 
-            <!-- Preferência de Rotas CO2 -->
+            <!-- CO2 Routes Preference -->
             <LinearLayout
                 android:id="@+id/layout_co2_preference"
                 android:layout_width="match_parent"
@@ -194,7 +192,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Priorizar Rotas Ecológicas"
+                        android:text="Prioritize Eco-Friendly Routes"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary" />
@@ -202,7 +200,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sugerir rotas com menor emissão de CO₂"
+                        android:text="Suggest routes with lower CO₂ emissions"
                         android:textSize="13sp"
                         android:layout_marginTop="2dp"
                         android:textColor="@color/text_secondary" />
@@ -225,18 +223,18 @@
                 android:background="@color/divider_color"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Seção Informações -->
+            <!-- Information Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="INFORMAÇÕES"
+                android:text="INFORMATION"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="12dp"
                 android:textColor="@color/text_secondary" />
 
-            <!-- Sobre -->
+            <!-- About -->
             <LinearLayout
                 android:id="@+id/btn_sobre"
                 android:layout_width="match_parent"
@@ -264,7 +262,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sobre o FasTravel"
+                    android:text="About FasTravel"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginStart="16dp"
@@ -285,12 +283,12 @@
                 android:background="@color/divider_color"
                 android:layout_marginBottom="32dp" />
 
-            <!-- Botão Sair -->
+            <!-- Logout Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sair"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Sair da Conta"
+                android:text="Log Out"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:icon="@drawable/ic_logout"
@@ -301,7 +299,7 @@
                 app:cornerRadius="12dp"
                 android:elevation="2dp" />
 
-            <!-- Versão -->
+            <!-- Version -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

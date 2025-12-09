@@ -36,7 +36,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        btnGithubTomas.setOnClickListener(v -> openGithub("tomasimoes"));
+        btnGithubTomas.setOnClickListener(v -> openGithub("tomas-simoes"));
         btnGithubLeonardo.setOnClickListener(v -> openGithub("leorcf"));
         btnGithubRafael.setOnClickListener(v -> openGithub("Rafasta236"));
 
