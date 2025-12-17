@@ -61,7 +61,7 @@ public class FavoritesManager {
             TextView textSubtituloTrabalho,
             Listener listener
     ) {
-        this.context = context.getApplicationContext();
+        this.context = context;
         this.prefs = prefs;
         this.containerFavoritos = containerFavoritos;
         this.favoritoCasa = favoritoCasa;
